@@ -18,4 +18,5 @@ make_dir_complete() {
     complete -o nospace -F $prgname $aliasname
 }
 
-make_dir_complete dv ~/Dropbox/Dev
+make_dir_complete dev ~/Dropbox/Dev
+make_dir_complete ds ~/Desktop
