@@ -2,6 +2,7 @@
 
 make_dir_complete() {
     local aliasname=$1
+    #local aliaslength=$(echo $1| awk '{print length}')
     local dirname=$(stat -f $2)
     local prgname="__s_${aliasname}__"
     FUNC="function $prgname() {
@@ -18,5 +19,5 @@ make_dir_complete() {
     complete -o nospace -F $prgname $aliasname
 }
 
-make_dir_complete dev ~/Dropbox/Dev
-make_dir_complete ds ~/Desktop
+make_dir_complete re ~/Dropbox/Dev
+make_dir_complete dk ~/Desktop
