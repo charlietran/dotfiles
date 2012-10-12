@@ -3,3 +3,11 @@
 *.sublime-project
 *.sublime-workspace
 *.todo
+*.rbc
+*.sassc
+.sass-cache
+/.bundle
+/vendor/bundle
+/log/*
+/tmp/*
+/spec/tmp/*
