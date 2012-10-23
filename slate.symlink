@@ -1,0 +1,56 @@
+config defaultToCurrentScreen true
+config nudgePercentOf screenSize
+config resizePercentOf screenSize
+config windowHintsTopLeftX (windowSizeX/2)-(windowHintsWidth/2)
+config windowHintsTopLeftY (windowSizeY/2)-(windowHintsHeight/2)
+config secondsBeforeRepeat 0.1
+config secondsBetweenRepeat 0.005
+
+# General aliases
+alias sox screenOriginX
+alias soy screenOriginY
+alias ssx screenSizeX
+alias ssy screenSizeY
+
+# Position aliases
+alias centered ${sox}+${ssx}/8;${soy}+${ssy}/8 ${ssx}/8*6;${ssy}/8*6
+alias fullscreen ${sox};${soy} ${ssx};${ssy}
+alias leftHalf ${sox};${soy} ${ssx}/2;${ssy}
+alias bottomHalf ${sox};${soy}+${ssy}/2 ${ssx};${ssy}/2
+alias topHalf ${sox};${soy} ${ssx};${ssy}/2
+alias rightHalf ${sox}+${ssx}/2;${soy} ${ssx}/2;${ssy}
+alias topLeftQuarter ${sox};${soy} ${ssx}/2;${ssy}/2
+alias topRightQuarter ${sox}+${ssx}/2;${soy} ${ssx}/2;${ssy}/2
+alias bottomLeftQuarter ${sox};${soy}+${ssy}/2 ${ssx}/2;${ssy}/2
+alias bottomRightQuarter ${sox}+${ssx}/2;${soy}+${ssy}/2 ${ssx}/2;${ssy}/2
+
+# Resize Bindings
+bind right:cmd;ctrl;shift resize +1% +0
+bind left:cmd;ctrl;shift   resize -1% +0
+bind up:cmd;ctrl;shift     resize +0 -1%
+bind down:cmd;ctrl;shift   resize +0 +1%
+
+# Nudge Bindings
+bind right:ctrl;alt;shift  nudge +1% +0
+bind left:ctrl;alt;shift   nudge -1% +0
+bind up:ctrl;alt;shift     nudge +0 -1%
+bind down:ctrl;alt;shift   nudge +0 +1%
+
+# Push Bindings
+bind right:alt;ctrl;cmd   push right bar-resize:screenSizeX/2
+bind left:alt;ctrl;cmd    push left  bar-resize:screenSizeX/2
+bind up:alt;ctrl;cmd      throw down  resize
+bind down:alt;ctrl;cmd    throw down  resize
+# bind up:shift;ctrl;cmd    push up    bar-resize:screenSizeY/2
+# bind down:shift;ctrl;cmd  push down  bar-resize:screenSizeY/2
+
+# Focus Bindings
+#bind right:cmd    focus right
+#bind left:cmd     focus left
+#bind up:cmd       focus up
+#bind down:cmd     focus down
+#bind up:cmd;alt   focus behind
+#bind down:cmd;alt focus behind
+
+# Window Hints
+#bind esc:cmd hint
