@@ -38,6 +38,12 @@ defaults write com.apple.BluetoothAudioAgent "Apple Bitpool Min (editable)" -int
 # (e.g. enable Tab in modal dialogs)
 defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
 
+# Fast Key Repeat Rate
+defaults write NSGlobalDomain KeyRepeat -int 0
+
+# Delay Before Key Repeat
+defaults write NSGlobalDomain InitialKeyRepeat -int 15
+
 # Disable press-and-hold for keys in favor of key repeat
 defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 
