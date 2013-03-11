@@ -11,3 +11,4 @@
 /log/*
 /tmp/*
 /spec/tmp/*
+.dropbox
