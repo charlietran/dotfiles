@@ -5,6 +5,9 @@ alias ....="cd ../../.."
 alias .....="cd ../../../.."
 alias -- -="cd -"
 
+#SSH Config
+alias sshconfig="nano ~/.ssh/config"
+
 # Shortcuts
 alias d="cd ~/Dropbox"
 alias dl="cd ~/Downloads"
@@ -118,6 +121,10 @@ for method in GET HEAD POST PUT DELETE TRACE OPTIONS; do
 done
 
 # Stuff I never really use but cannot delete either because of http://xkcd.com/530/
-alias stfu="osascript -e 'set volume output muted true'"
-alias pumpitup="osascript -e 'set volume 7'"
-alias hax="growlnotify -a 'Activity Monitor' 'System error' -m 'WTF R U DOIN'"
+#alias stfu="osascript -e 'set volume output muted true'"
+#alias pumpitup="osascript -e 'set volume 7'"
+#alias hax="growlnotify -a 'Activity Monitor' 'System error' -m 'WTF R U DOIN'"
+
+# Quick way to rebuild the Launch Services database and get rid
+# of duplicates in the Open With submenu.
+alias fixopenwith='/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user'
