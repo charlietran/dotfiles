@@ -1,5 +1,6 @@
 # Add `~/bin` to the `$PATH`
-export PATH="$HOME/bin:$HOME/.rbenv/bin:$PATH"
+export PATH="$HOME/bin:$HOME/.rbenv/bin:/usr/local/bin:/usr/local/share/npm/bin:$PATH"
+export NODE_PATH="/usr/local/lib/node"
 
 # Load the shell dotfiles, and then some:
 # * ~/.path can be used to extend `$PATH`.
@@ -13,7 +14,11 @@ unset file
 shopt -s nocaseglob
 
 # Append to the Bash history file, rather than overwriting it
+export HISTCONTROL=ignoredups:erasedups
+export HISTSIZE=100000  
+export HISTFILESIZE=100000
 shopt -s histappend
+export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 
 # Autocorrect typos in path names when using `cd`
 shopt -s cdspell
