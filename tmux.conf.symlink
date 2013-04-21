@@ -1,11 +1,11 @@
 # Bindings
-
   # Action Key
-  set-option -g prefix C-q
+  set-option -g prefix C-g
 
   # Window Management
   bind-key C-q last-window
-  bind-key C-a last-pane
+  bind-key C-g last-pane
+  bind-key C-t swap-window -t 0
 
   # Panes 
   unbind %
@@ -21,6 +21,8 @@
   bind C-k resize-pane -U
   bind C-l resize-pane -R
 
+set -g base-index 1
+set -g escape-time 0
 
 set -g default-terminal "screen-256color"
 
@@ -40,3 +42,8 @@ set -g status-left '#[fg=colour252] #S #[fg=colour238,bg=colour234,nobold]'
 set -g window-status-format "#[fg=white,bg=colour235] #I #W "
 set -g window-status-current-format "#[bg=colour203,fg=colour233,noreverse,bold] #I #W #[fg=colour39,bg=colour234,nobold]"
 set -g status-right '#[fg=colour39] #(battery-life) #(battery-time) #[fg=colour203] #(date +"%F %H:%M ")'
+
+# Mouse Support
+set-option -g mouse-select-pane on
+set-option -g mouse-select-window on
+# set-window-option -g mode-mouse on
