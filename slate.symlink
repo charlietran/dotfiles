@@ -58,8 +58,10 @@ bind down:${hyper}     focus down
 #bind q:${hyper} hint QWEASDZXC
 
 # Snapshots
-bind f1:${hyper} activate-snapshot theSnapshot save-to-disk
-bind f5:${hyper} snapshot theSnapshot save-to-disk
+bind f1:${hyper} activate-snapshot bigSnapshot save-to-disk
+bind f2:${hyper} activate-snapshot smallSnapshot save-to-disk
+bind f11:${hyper} snapshot bigSnapshot save-to-disk
+bind f12:${hyper} snapshot smallSnapshot save-to-disk
 
 # Move between screens
 bind /:ctrl;alt;cmd       throw next resize
