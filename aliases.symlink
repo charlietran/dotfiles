@@ -6,7 +6,7 @@ alias .....="cd ../../../.."
 alias -- -="cd -"
 
 #SSH Config
-alias sshconfig="nano ~/.ssh/config"
+alias sshconfig="v ~/.ssh/config"
 
 # Shortcuts
 alias d="cd ~/Dropbox"

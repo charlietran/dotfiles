@@ -3,6 +3,14 @@ require 'irb/completion'
 require 'irb/ext/save-history'
 require 'rubygems'
 
+if defined?(Rails) && Rails.respond_to?(:logger)
+  require 'logger'
+  Rails.logger = Logger.new($stdout)
+  if defined?(Mongoid)
+    Mongoid.logger = Rails.logger
+  end
+end
+
 IRB.conf[:SAVE_HISTORY] = 1000
 IRB.conf[:HISTORY_FILE] = "#{ENV['HOME']}/.irb_history"
 
