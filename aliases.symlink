@@ -14,10 +14,12 @@ alias dl="cd ~/Downloads"
 alias dt="cd ~/Desktop"
 alias dev="cd ~/Dropbox/Dev"
 alias g="git"
+alias gt="gittower"
 alias wtf="git-wtf"
 alias h="history"
 alias v="vim"
 alias s="subl"
+alias ios='open /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone\ Simulator.app'
 
 # Detect which `ls` flavor is in use
 if ls --color > /dev/null 2>&1; then # GNU `ls`
@@ -131,3 +133,7 @@ alias fixopenwith='/System/Library/Frameworks/CoreServices.framework/Frameworks/
 
 # Restart CoreAudio
 alias fixairplay="sudo pkill coreaudiod"
+
+# Rails
+alias bex="bundle exec"
+alias binst="bundle install"

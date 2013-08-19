@@ -7,5 +7,5 @@ install: --no-ri --no-rdoc --env-shebang
 - http://rubygems.org
 :benchmark: false
 :backtrace: false
-update: --no-rdoc --env-shebang
+update: --no-ri --no-rdoc --env-shebang
 :update_sources: true

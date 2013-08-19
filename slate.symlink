@@ -65,4 +65,4 @@ bind f12:${hyper} snapshot smallSnapshot save-to-disk
 
 # Move between screens
 bind /:ctrl;alt;cmd       throw next resize
-bind r:${hyper}       relaunch
+# bind r:${hyper}       relaunch
