@@ -10,7 +10,7 @@
 
   # Window Management
   bind-key -n M-q last-window
-  bind-key -n M-g last-pane
+  bind-key -n C-q last-pane
   bind-key -n M-t swap-window -t 0
 
   # Panes
@@ -31,12 +31,14 @@
   bind-key -n C-Right select-pane -R
   bind-key -n S-C-Right swap-pane -D
   bind-key -n S-C-Left swap-pane -U
-  
-  
-  bind-key -n C-M-Left resize-pane -L
-  bind-key -n C-M-Down resize-pane -D
-  bind-key -n C-M-Up resize-pane -U
-  bind-key -n C-M-Right resize-pane -R
+
+
+  bind-key -r C-Left  resize-pane -L
+  bind-key -r C-Down  resize-pane -D
+  bind-key -r C-Up    resize-pane -U
+  bind-key -r C-Right resize-pane -R
+
+  bind-key -n C-n command-prompt 'rename-window %%'
 
   # Copy Mode
   setw -g mode-keys vi
@@ -55,6 +57,7 @@ setw -g monitor-activity on
 set -g visual-activity on
 
 set -g base-index 1
+set -g pane-base-index 1
 set -g escape-time 0
 
 set -g default-terminal "screen-256color"
@@ -75,6 +78,7 @@ set -g message-attr bold
 set -g status-left '#[fg=colour252] #S #[fg=colour238,bg=colour234,nobold]'
 set -g window-status-format "#[fg=white,bg=colour235] #I #W "
 set -g window-status-current-format "#[bg=colour203,fg=colour233,noreverse,bold] #I #W #[fg=colour39,bg=colour234,nobold]"
+set -g status-right ''
 # set -g status-right '#[fg=colour39] #(battery-life) #(battery-time) #[fg=colour203] #(date +"%F %H:%M ")'
 
 # Mouse Support
