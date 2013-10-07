@@ -67,6 +67,7 @@
 [merge]
   # Include summaries of merged commits in newly created merge commit messages
   log = true
+	tool = opendiff
 
  # Use `origin` as the default remote on the `master` branch in all cases
  [branch "master"]
@@ -88,6 +89,7 @@
 [diff]
 	mnemonicprefix = true
 	renames = copies
+	tool = opendiff
 
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
