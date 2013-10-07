@@ -16,7 +16,7 @@ alias dev="cd ~/Dropbox/Dev"
 alias g="git"
 alias gt="gittower"
 alias wtf="git-wtf"
-alias h="history"
+alias h="heroku"
 alias v="vim"
 alias s="subl"
 alias ios='open /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone\ Simulator.app'
@@ -135,5 +135,8 @@ alias fixopenwith='/System/Library/Frameworks/CoreServices.framework/Frameworks/
 alias fixairplay="sudo pkill coreaudiod"
 
 # Rails
-alias bex="bundle exec"
+alias bx="bundle exec"
 alias binst="bundle install"
+alias z='zeus'
+alias zs='zeus start'
+alias zr='zeus rake'
