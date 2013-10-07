@@ -1,4 +1,6 @@
-export POW_WORKERS=5
-export POW_DST_PORT=88
-export POW_TIMEOUT=30000
-export PATH=/Users/clint/.rbenv/shims:/Users/clint/Developer/bin:$PATH
+# export POW_WORKERS=5
+# export POW_DST_PORT=88
+# export POW_TIMEOUT=30000
+export HOME=/Users/chatra
+export PATH="$HOME/.rbenv/shims:$HOME/.rbenv/bin:$PATH"
+export POW_EXT_DOMAINS=tv
