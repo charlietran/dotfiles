@@ -93,10 +93,14 @@
 
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path = 
+	path =
 
 [push]
 	default = tracking
 
 [apply]
 	whitespace = nowarn
+[branch]
+	autosetuprebase = always
+[pull]
+	rebase = preserve

@@ -18,8 +18,10 @@ alias gt="gittower"
 alias wtf="git-wtf"
 alias h="heroku"
 alias v="vim"
-alias s="subl"
+alias s="/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl"
 alias ios='open /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone\ Simulator.app'
+alias tma='tmux attach'
+alias pdev='psql -d crystal_dev'
 
 # Detect which `ls` flavor is in use
 if ls --color > /dev/null 2>&1; then # GNU `ls`
@@ -65,8 +67,13 @@ alias flush="dscacheutil -flushcache && killall -HUP mDNSResponder"
 alias lscleanup="/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user && killall Finder"
 
 # View HTTP traffic
-alias sniff="sudo ngrep -d 'en1' -t '^(GET|POST) ' 'tcp and port 80'"
-alias httpdump="sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET \/.*\""
+alias tcpd3000="sudo tcpdump -s 0 -A -i lo0 'tcp port 3000 and (((ip[2:2] - ((ip[0]&0xf)<<2)) - ((tcp[12]&0xf0)>>2)) != 0)'"
+alias tcpd7000="sudo tcpdump -s 0 -A -i lo0 'tcp port 7000 and (((ip[2:2] - ((ip[0]&0xf)<<2)) - ((tcp[12]&0xf0)>>2)) != 0)'"
+alias httpdump="sudo tcpdump -i en0 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET \/.*\""
+
+# HTTP Server
+alias server="python -m SimpleHTTPServer"
+
 
 # Canonical hex dump; some systems have this symlinked
 command -v hd > /dev/null || alias hd="hexdump -C"
@@ -140,3 +147,5 @@ alias binst="bundle install"
 alias z='zeus'
 alias zs='zeus start'
 alias zr='zeus rake'
+alias zc='zeus console'
+alias zt='zeus test'

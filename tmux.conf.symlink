@@ -33,10 +33,12 @@
   bind-key -n S-C-Left swap-pane -U
 
 
+
   bind-key -r C-Left  resize-pane -L
   bind-key -r C-Down  resize-pane -D
   bind-key -r C-Up    resize-pane -U
   bind-key -r C-Right resize-pane -R
+  bind-key -n C-z resize-pane -Z
 
   bind-key -n C-n command-prompt 'rename-window %%'
 
@@ -45,7 +47,10 @@
   bind [ copy-mode
   bind -t vi-copy v begin-selection
   bind -t vi-copy V rectangle-toggle
-  bind -t vi-copy y copy-selection
+  # bind -t vi-copy y copy-selection
+  bind -t vi-copy y copy-pipe "reattach-to-user-namespace pbcopy"
+  unbind -t vi-copy Enter
+  bind -t vi-copy Enter copy-pipe "reattach-to-user-namespace pbcopy"
   bind ] paste-buffer
 
   # easily toggle synchronization (mnemonic: e is for echo)
@@ -61,7 +66,7 @@ set -g pane-base-index 1
 set -g escape-time 0
 
 set -g default-terminal "screen-256color"
-set -g history-limit 2000
+set -g history-limit 10000
 
 set -g status-left-length 32
 set -g status-right-length 150
