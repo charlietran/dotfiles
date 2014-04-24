@@ -23,7 +23,7 @@ class Object
   def local_methods(obj = self)
     (obj.methods - obj.class.superclass.instance_methods).sort
   end
-  
+
   # print documentation
   #
   #   ri 'Array#pop'
@@ -37,6 +37,21 @@ class Object
     end
     puts `ri '#{method}'`
   end
+
+  def fields(model)
+    puts "Columns for '#{model.table_name}'"
+    width = model.columns.inject(0) { |max_width, col| col.name.size > max_width ? col.name.size : max_width }
+    _columns = model.columns.collect do |c|
+      "  %-#{width + 2}s :%s" % [c.name, c.type]
+    end.join("\n")
+    puts _columns
+  end
+  alias :c :fields
+
+end
+
+def py(object)
+  puts object.to_yaml
 end
 
 def r

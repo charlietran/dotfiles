@@ -2,8 +2,14 @@
   # View the SHA, description, and history graph of the latest 20 commits
   l = log --pretty=oneline -n 20 --graph
 
+  # pretty one-line log with tags, branches and authors
+  ls = log --pretty=format:'%C(yellow)%h %C(blue)%ad%C(red)%d %C(reset)%s%C(green) [%cn]' --decorate --date=short
+
+  # a verbose ls, shows changed files too
+  lsv = log --pretty=format:'%C(yellow)%h %C(blue)%ad%C(red)%d %C(reset)%s%C(green) [%cn]' --decorate --date=short --numstat
+
   # View the current working tree status using the short format
-  s = status -s
+  s = status -sb
 
   # Show the diff between the latest commit and the current state
   d = !"git diff-index --quiet HEAD -- || clear; git diff --patch-with-stat"
@@ -20,6 +26,9 @@
   # Commit all changes
   ca = !git add -A && git commit -av
 
+  # Checkout
+  co = checkout
+
   # Switch to a branch, creating it if necessary
   go = checkout -B
 
@@ -32,7 +41,7 @@
   credit = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"
 
   # Interactive rebase with the given number of latest commits
-  reb = "!r() { git rebase -i HEAD~$1; }; r"
+  reb = "!r() { git rebase --autosquash -i HEAD~10; }; r"
 
   # Reflog with dates
   ref = reflog --date=local
@@ -67,7 +76,7 @@
 [merge]
   # Include summaries of merged commits in newly created merge commit messages
   log = true
-	tool = opendiff
+	tool = sublime
 
  # Use `origin` as the default remote on the `master` branch in all cases
  [branch "master"]
@@ -89,18 +98,24 @@
 [diff]
 	mnemonicprefix = true
 	renames = copies
-	tool = opendiff
-
-[difftool "sourcetree"]
-	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path =
+	tool = sublime
 
 [push]
 	default = tracking
 
 [apply]
 	whitespace = nowarn
-[branch]
-	autosetuprebase = always
-[pull]
-	rebase = preserve
+
+# [branch]
+# 	autosetuprebase = always
+#
+# [pull]
+# 	rebase = preserve
+
+[difftool "sublime"]
+  cmd = subl -w "$LOCAL" "$REMOTE"
+  trustExitCode = false
+
+[mergetool "sublime"]
+	cmd = subl -w $MERGED
+	trustExitCode = false

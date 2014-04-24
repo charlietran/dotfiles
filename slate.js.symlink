@@ -67,6 +67,7 @@ var threeMonitorLayout = S.lay("threeMonitor", {
   "Finder" : laptopFullHash,
   "Rdio" : portraitTopHash,
   "nvALT" : portraitTopHash,
+  "TaskPaper" : portraitTopHash,
   "Messages" : portraitMessagesHash
 });
 
