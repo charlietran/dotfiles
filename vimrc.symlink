@@ -23,6 +23,11 @@ set formatoptions+=n       " support for numbered/bullet lists
 set virtualedit=block      " allow virtual edit in visual block ..
 syntax on
 set background=dark
+" solarized options 
+let g:solarized_visibility = "high"
+let g:solarized_contrast = "high"
+let g:solarized_termcolors = 256 
+let g:solarized_termtrans = 1
 colorscheme solarized
 
 " ----------------------------------------------------------------------------
