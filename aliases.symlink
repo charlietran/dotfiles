@@ -22,6 +22,9 @@ alias s="/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl"
 alias ios='open /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone\ Simulator.app'
 alias tma='tmux attach'
 alias pdev='psql -d crystal_dev'
+alias fm='re crystal && ./crystal-server'
+alias reload='source ~/.bash_profile'
+alias xtail='tail -f log/development.log |grep XXX'
 
 # Detect which `ls` flavor is in use
 if ls --color > /dev/null 2>&1; then # GNU `ls`
@@ -34,7 +37,7 @@ fi
 alias l="ls -l ${colorflag}"
 
 # List all files colorized in long format, including dot files
-alias la="ls -la ${colorflag}"
+alias la="ls -lah ${colorflag}"
 
 # List only directories
 alias lsd='ls -l ${colorflag} | grep "^d"'
