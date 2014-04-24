@@ -32,8 +32,6 @@
   bind-key -n S-C-Right swap-pane -D
   bind-key -n S-C-Left swap-pane -U
 
-
-
   bind-key -r C-Left  resize-pane -L
   bind-key -r C-Down  resize-pane -D
   bind-key -r C-Up    resize-pane -U
@@ -44,14 +42,18 @@
 
   # Copy Mode
   setw -g mode-keys vi
-  bind [ copy-mode
   bind -t vi-copy v begin-selection
   bind -t vi-copy V rectangle-toggle
   # bind -t vi-copy y copy-selection
   bind -t vi-copy y copy-pipe "reattach-to-user-namespace pbcopy"
   unbind -t vi-copy Enter
   bind -t vi-copy Enter copy-pipe "reattach-to-user-namespace pbcopy"
-  bind ] paste-buffer
+  unbind [
+  bind -n C-q copy-mode
+  unbind p
+  bind p paste-buffer
+  # bind-key -t vi-copy 'v' begin-selection
+  # bind-key -t vi-copy 'y' copy-selection
 
   # easily toggle synchronization (mnemonic: e is for echo)
   bind e setw synchronize-panes on
