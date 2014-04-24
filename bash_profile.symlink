@@ -1,5 +1,5 @@
 # Add `~/bin` to the `$PATH`
-export PATH="$HOME/bin:$HOME/.rbenv/bin:/usr/local/bin:/usr/local/share/npm/bin:/Applications/Postgres93.app/Contents/MacOS/bin:$PATH"
+export PATH="/Applications/Postgres.app/Contents/MacOS/bin:$HOME/bin:$HOME/.rbenv/bin:/usr/local/bin:/usr/local/share/npm/bin:/usr/local/Cellar/go/1.2.1/libexec/bin:$PATH"
 export NODE_PATH="/usr/local/lib/node"
 
 # Load the shell dotfiles, and then some:
@@ -15,7 +15,7 @@ shopt -s nocaseglob
 
 # Append to the Bash history file, rather than overwriting it
 export HISTCONTROL=ignoredups:erasedups
-export HISTSIZE=100000  
+export HISTSIZE=100000
 export HISTFILESIZE=100000
 shopt -s histappend
 export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
@@ -46,6 +46,13 @@ complete -o "nospace" -W "Contacts Calendar Dock Finder Mail Safari iTunes Syste
 
 # If possible, add tab completion for many more commands
 [ -f /etc/bash_completion ] && source /etc/bash_completion
+
+if [ -f ~/bin/.git-completion.bash ]; then
+  . ~/bin/.git-completion.bash
+fi
+
+# Add git completion to custom 'g' alias.
+__git_complete g __git_main
 
 # rbenv
 if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
