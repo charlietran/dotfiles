@@ -15,10 +15,6 @@ export HISTIGNORE="ls:cd:cd -:pwd:exit:date:* --help"
 
 export GREP_OPTIONS='--color=always'
 
-export ANDROID_HOME=/usr/local/opt/android-sdk
-export PATH=$PATH:$ANDROID_HOME/tools
-export PATH=$PATH:$ANDROID_HOME/platform-tools
-export PATH=$PATH:$ANDROID_HOME/build-tools
 export CC=gcc
 #export DYLD_LIBRARY_PATH="/usr/local/mysql/lib:$DYLD_LIBRARY_PATH"
 
