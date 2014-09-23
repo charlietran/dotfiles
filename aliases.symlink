@@ -25,6 +25,7 @@ alias pdev='psql -d crystal_dev'
 alias fm='re crystal && ./crystal-server'
 alias reload='source ~/.bash_profile'
 alias xtail='tail -f log/development.log |grep XXX'
+alias devtail='tail -f log/development.log'
 
 # Detect which `ls` flavor is in use
 if ls --color > /dev/null 2>&1; then # GNU `ls`
