@@ -40,14 +40,20 @@
   # Credit an author on the latest commit
   credit = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"
 
+  # rebase
+  reb = pull --rebase=preserve
+
   # Interactive rebase with the given number of latest commits
-  reb = "!r() { git rebase --autosquash -i HEAD~10; }; r"
+  rewrite = "!r() { git rebase --autosquash -i HEAD~$1; }; r"
 
   # Reflog with dates
   ref = reflog --date=local
 
   # Undo a `git push`
   undopush = push -f origin HEAD^:master
+
+  # Search!
+  search = "!search() { git log --pretty=format:'%C(yellow)%h (%an %ar) %s' --name-only -S$1; }; search"
 
 [apply]
   # Detect whitespace errors when applying a patch
@@ -108,9 +114,6 @@
 
 # [branch]
 # 	autosetuprebase = always
-#
-# [pull]
-# 	rebase = preserve
 
 [difftool "sublime"]
   cmd = subl -w "$LOCAL" "$REMOTE"
