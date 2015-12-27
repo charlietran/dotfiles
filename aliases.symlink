@@ -22,10 +22,11 @@ alias s="/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl"
 alias ios='open /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone\ Simulator.app'
 alias tma='tmux attach'
 alias pdev='psql -d crystal_dev'
-alias fm='re crystal && ./crystal-server'
+alias fm='cd ~/dev/crystal && ./server'
 alias reload='source ~/.bash_profile'
 alias xtail='tail -f log/development.log |grep XXX'
 alias devtail='tail -f log/development.log'
+alias tmn='cd ~/dev/crystal && tmux'
 
 # Detect which `ls` flavor is in use
 if ls --color > /dev/null 2>&1; then # GNU `ls`
@@ -51,7 +52,10 @@ export LS_COLORS='no=00:fi=00:di=01;34:ln=01;36:pi=40;33:so=01;35:do=01;35:bd=40
 alias sudo='sudo '
 
 # Gzip-enabled `curl`
-alias gurl="curl --compressed"
+prettycurl() {
+  curl -s "$@" | python -m json.tool | pygmentize -l javascript
+}
+alias purl=prettycurl
 
 # Get OS X Software Updates, and update installed Ruby gems, Homebrew, npm, and their installed packages
 alias update='sudo softwareupdate -i -a; brew update; brew upgrade; npm update npm -g; npm update -g; sudo gem update'
@@ -148,8 +152,8 @@ alias fixairplay="sudo pkill coreaudiod"
 # Rails
 alias bx="bundle exec"
 alias binst="bundle install"
-alias z='zeus'
-alias zs='zeus start'
-alias zr='zeus rake'
-alias zc='zeus console'
-alias zt='zeus test'
+alias rc="spring rails console"
+alias r="spring rake"
+alias rake="spring rake"
+alias rails="spring rails"
+alias rspec="spring rspec"

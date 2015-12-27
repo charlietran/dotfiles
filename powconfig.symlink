@@ -3,4 +3,4 @@
 # export POW_TIMEOUT=30000
 export HOME=/Users/chatra
 export PATH="$HOME/.rbenv/shims:$HOME/.rbenv/bin:$PATH"
-export POW_EXT_DOMAINS=tv
+export POW_EXT_DOMAINS=ngrok.com

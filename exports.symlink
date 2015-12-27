@@ -13,8 +13,11 @@ export HISTCONTROL=ignoredups
 # Make some commands not show up in history
 export HISTIGNORE="ls:cd:cd -:pwd:exit:date:* --help"
 
-export GREP_OPTIONS='--color=always'
+# export GREP_OPTIONS='--color=always'
 
 export CC=gcc
 #export DYLD_LIBRARY_PATH="/usr/local/mysql/lib:$DYLD_LIBRARY_PATH"
 
+
+export LC_CTYPE=C 
+export LANG=C

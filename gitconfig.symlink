@@ -23,6 +23,9 @@
   # Clone a repository including all submodules
   c = clone --recursive
 
+  # Ditch
+  ditch=!git add -A && git commit -m "TMP: Save before clean reset" && git reset HEAD~1 --hard
+
   # Commit all changes
   ca = !git add -A && git commit -av
 
@@ -44,7 +47,7 @@
   reb = pull --rebase=preserve
 
   # Interactive rebase with the given number of latest commits
-  rewrite = "!r() { git rebase --autosquash -i HEAD~$1; }; r"
+  rewrite = "!r() { git rebase --preserve-merges --autosquash -i HEAD~$1; }; r"
 
   # Reflog with dates
   ref = reflog --date=local
@@ -54,6 +57,7 @@
 
   # Search!
   search = "!search() { git log --pretty=format:'%C(yellow)%h (%an %ar) %s' --name-only -S$1; }; search"
+	dfw = diff --ignore-space-change
 
 [apply]
   # Detect whitespace errors when applying a patch
@@ -79,6 +83,12 @@
   added = yellow
   changed = green
   untracked = cyan
+
+[color "diff-highlight"]
+  oldNormal = "red bold"
+  oldHighlight = "red bold 52"
+  newNormal = "green bold"
+  newHighlight = "green bold 22"
 [merge]
   # Include summaries of merged commits in newly created merge commit messages
   log = true
@@ -93,10 +103,11 @@
    merge = refs/heads/development
 
 [core]
-	quotepath = false
-	excludesfile = ~/.gitignore
-    whitespace = space-before-tab,indent-with-non-tab,trailing-space
-    editor = "subl -w"
+  quotepath = false
+  excludesfile = ~/.gitignore
+  whitespace = space-before-tab,indent-with-non-tab,trailing-space
+  editor = "subl -w"
+  pager = bash -lc 'diff-highlight | strip_diff_leading_symbols | less -r' -
 
 [mergetool]
 	keepBackup = true
@@ -104,7 +115,9 @@
 [diff]
 	mnemonicprefix = true
 	renames = copies
-	tool = sublime
+
+[diff "nodiff"]
+	command = /usr/bin/true
 
 [push]
 	default = tracking
@@ -120,5 +133,10 @@
   trustExitCode = false
 
 [mergetool "sublime"]
-	cmd = subl -w $MERGED
-	trustExitCode = false
+  cmd = subl -w $MERGED
+  trustExitCode = false
+[filter "lfs"]
+	clean = git-lfs clean %f
+	smudge = git-lfs smudge %f
+	required = true
+[difftool]
