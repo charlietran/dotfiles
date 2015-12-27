@@ -25,12 +25,19 @@
 
   # bind-key -n M-[     select-pane -t :.-
   # bind-key -n M-]     select-pane -t :.+
-  bind-key -n C-Down  select-pane -D
-  bind-key -n C-Left  select-pane -L
-  bind-key -n C-Up    select-pane -U
-  bind-key -n C-Right select-pane -R
+  bind-key -n C-Down    select-pane -D
+  bind-key -n C-j       select-pane -D
+  bind-key -n C-Left    select-pane -L
+  bind-key -n C-Left    select-pane -L
+  bind-key -n C-Up      select-pane -U
+  bind-key -n C-k       select-pane -U
+  bind-key -n C-Right   select-pane -R
+  bind-key -n C-Right   select-pane -R
   bind-key -n S-C-Right swap-pane -D
-  bind-key -n S-C-Left swap-pane -U
+  bind-key -n S-C-Left  swap-pane -U
+  bind-key -n M-j       swap-pane -D
+  bind-key -n M-k       swap-pane -D
+
 
   bind-key -r C-Left  resize-pane -L
   bind-key -r C-Down  resize-pane -D
@@ -89,7 +96,15 @@ set -g status-right ''
 # set -g status-right '#[fg=colour39] #(battery-life) #(battery-time) #[fg=colour203] #(date +"%F %H:%M ")'
 
 # Mouse Support
-set-option -g mouse-select-pane on
-set-option -g mouse-select-window on
-set-window-option -g mode-mouse on
-set -g mouse-utf8 off
+set-option -g mouse on
+bind -n WheelUpPane   select-pane -t= \; copy-mode -e \; send-keys -M
+bind -n WheelDownPane select-pane -t= \;                 send-keys -M
+bind -n C-WheelUpPane select-pane -t= \; copy-mode -e \; send-keys -M
+bind -t vi-copy    C-WheelUpPane   halfpage-up
+bind -t vi-copy    C-WheelDownPane halfpage-down
+bind -t emacs-copy C-WheelUpPane   halfpage-up
+bind -t emacs-copy C-WheelDownPane halfpage-down
+
+#set-option -g mouse-select-window on
+#set-window-option -g mode-mouse on
+#set -g mouse-utf8 off
