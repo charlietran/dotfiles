@@ -23,30 +23,8 @@ make_dir_complete re ~/dev
 make_dir_complete dk ~/Desktop
 make_dir_complete dr ~/Dropbox
 
-
-export MARKPATH=$HOME/.marks
-
-function j {
-    cd -P $MARKPATH/$1 2>/dev/null || echo "No such mark: $1"
-}
-
-_completemarks() {
-  local curw=${COMP_WORDS[COMP_CWORD]}
-  local wordlist=$(ls -1 $MARKPATH| tr -d '\0')
-  COMPREPLY=($(compgen -W '${wordlist[@]}' -- "$curw"))
-  return 0
-}
-complete -F _completemarks j unmark
-
-function mark {
-    mkdir -p $MARKPATH; ln -s "$(pwd)" $MARKPATH/$1
-}
-function unmark {
-    rm -i $MARKPATH/$1
-}
-
-function marks {
-    \ls -l "$MARKPATH/" | tail -n +2 | sed 's/  / /g' | cut -d' ' -f9- | awk -F ' -> ' '{printf "%-10s -> %s\n", $1, $2}'
+function perf {
+  curl -o /dev/null -s -w "%{time_connect} + %{time_starttransfer} = %{time_total}\n" "$1"
 }
 
 function strip_diff_leading_symbols(){
