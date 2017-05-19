@@ -1,75 +1,93 @@
+# -- general -------------------------------------------------------------------
 
-# Bindings
-  # Action Key
-  set-option -g prefix C-g
-  #bind C-a send-prefix
+set -g default-terminal "screen-256color" # colors!
+setw -g xterm-keys on
+set -s escape-time 0                     # faster command sequences
+set -sg repeat-time 600                   # increase repeat timeout
+set -s focus-events on
 
-  # Reload config
-  bind r source-file ~/.tmux.conf
+set -g default-shell $SHELL
+set -g default-command "reattach-to-user-namespace -l ${SHELL}"
+set -g history-limit 10000                # boost history to 10k lines
 
-  # Window Management
-  bind-key -n M-q last-window
-  bind-key -n C-q last-pane
-  bind-key -n M-t swap-window -t 0
+# Set command prefix to ctrl-g
+set-option -g prefix C-g
 
-  # Panes
-  unbind %
-  bind \ split-window -h
-  bind - split-window -v
+# Don't auto-name windows
+set-option -g allow-rename off
 
-  # Navigation
-  bind-key -n S-Left prev
-  bind-key -n S-Right next
-  bind -n S-down new-window
+# prefix, r to reload config
+bind r source-file ~/.tmux.conf
 
-  bind-key -n C-Up      select-pane -U
-  bind-key -n C-Down    select-pane -D
-  bind-key -n C-Left    select-pane -L
-  bind-key -n C-Right   select-pane -R
-  # bind-key -n C-k       select-pane -U
-  # bind-key -n M-[     select-pane -t :.-
-  # bind-key -n M-]     select-pane -t :.+
-  # bind-key -n C-j       select-pane -D
-  # bind-key -n S-C-Right swap-pane -D
-  # bind-key -n S-C-Left  swap-pane -U
-  # bind-key -n M-j       swap-pane -D
-  # bind-key -n M-k       swap-pane -D
+# prefix, e to open tmux config in editor
+bind e new-window -n '~/.tmux.conf' "sh -c '\${EDITOR:-vim} ~/.tmux.conf && tmux source ~/.tmux.conf && tmux display \"~/.tmux.conf sourced\"'"
 
+# Panes
+unbind %
+bind \ split-window -h
+bind - split-window -v
 
-  # bind-key -r C-Left  resize-pane -L
-  # bind-key -r C-Down  resize-pane -D
-  # bind-key -r C-Up    resize-pane -U
-  # bind-key -r C-Right resize-pane -R
-  # bind-key -n C-z resize-pane -Z
+# Window Navigation
+bind-key -n S-Left prev
+bind-key -n S-Right next
+bind -n S-down new-window
+bind-key -n M-tab next
+bind -n M-n new-window
 
-  # bind-key -n C-n command-prompt 'rename-window %%'
+bind-key -n M-1 select-window -t :1
+bind-key -n M-2 select-window -t :2
+bind-key -n M-3 select-window -t :3
+bind-key -n M-4 select-window -t :4
+bind-key -n M-5 select-window -t :5
+bind-key -n M-6 select-window -t :6
+bind-key -n M-7 select-window -t :7
+bind-key -n M-8 select-window -t :8
+bind-key -n M-9 select-window -t :9
+bind C-l send-keys 'C-l'
+bind C-k send-keys 'C-k'
 
-  # Copy Mode
-  setw -g mode-keys vi
-  bind -t vi-copy v begin-selection
-  bind -t vi-copy V rectangle-toggle
-  # bind -t vi-copy y copy-selection
-  bind -t vi-copy y copy-pipe pbcopy
-  unbind -t vi-copy Enter
-  bind -t vi-copy Enter copy-pipe pbcopy
-  unbind [
-  bind -n C-q copy-mode
-  unbind p
-  bind p paste-buffer
-  # bind-key -t vi-copy 'v' begin-selection
-  # bind-key -t vi-copy 'y' copy-selection
+#set -g -a terminal-overrides ',*:Ss=\E[%p1%d q:Se=\E[2 q'
 
-  # easily toggle synchronization (mnemonic: e is for echo)
-  bind e setw synchronize-panes on
-  bind E setw synchronize-panes off
+# vim/fzf navigation
+is_vim="ps -o state= -o comm= -t '#{pane_tty}' | grep -iqE '^[^TXZ ]+ +(\\S+\\/)?g?(view|n?vim?x?)(diff)?$'"
+
+is_fzf="ps -o state= -o comm= -t '#{pane_tty}' | grep -iqE '^[^TXZ ]+ +(\\S+\\/)?fzf$'"
+
+bind-key -n C-h run "($is_vim && tmux send-keys C-h) || tmux select-pane -L"
+bind-key -n C-l run "($is_vim && tmux send-keys C-l) || tmux select-pane -R"
+bind-key -n C-j run "(($is_vim || $is_fzf) && tmux send-keys C-j) || tmux select-pane -D"
+bind-key -n C-k run "(($is_vim || $is_fzf) && tmux send-keys C-k) || tmux select-pane -U"
+bind-key -n M-` run "($is_vim && tmux send-keys f10) || tmux last-pane"
+
+bind-key -r -T prefix h resize-pane -L
+bind-key -r -T prefix j resize-pane -D
+bind-key -r -T prefix k resize-pane -U
+bind-key -r -T prefix l resize-pane -R
+
+# ctrl-z to zoom current window
+bind-key -n C-z resize-pane -Z
+
+# Copy Mode
+setw -g mode-keys vi
+bind-key -T copy-mode-vi v send -X begin-selection
+bind-key -T copy-mode-vi V send -X rectangle-toggle
+bind-key -T copy-mode-vi y send -X copy-selection
+bind-key -T copy-mode-vi H send -X start-of-line
+bind-key -T copy-mode-vi L send -X end-of-line
+bind-key -T copy-mode-vi M-` send -X cancel\; last-pane
+bind-key -n C-q copy-mode
+
+# easily toggle synchronization (mnemonic: e is for echo)
+# bind e setw synchronize-panes on
+# bind E setw synchronize-panes off
 
 # Activity monitoring
 setw -g monitor-activity on
 set -g visual-activity on
 
-set -g base-index 1
-set -g pane-base-index 1
-set -g escape-time 0
+# -- display -------------------------------------------------------------------
+set -g base-index 1        # start windows numbering at 1
+set -g pane-base-index 1   # start pane numbering at 1
 
 set -g status-left-length 32
 set -g status-right-length 150
@@ -90,20 +108,13 @@ set -g status-right ''
 # set -g status-right '#[fg=colour39] #(battery-life) #(battery-time) #[fg=colour203] #(date +"%F %H:%M ")'
 
 # Mouse Support
-set-option -g mouse on
-bind -n WheelUpPane   select-pane -t= \; copy-mode -e \; send-keys -M
+set -g mouse on
+bind -n WheelUpPane if-shell "$is_vim" "send-keys -M" "select-pane -t= \; copy-mode -e \; send-keys -M"
+
+#bind -n WheelUpPane   select-pane -t= \; copy-mode -e \; send-keys -M
 bind -n WheelDownPane select-pane -t= \;                 send-keys -M
 bind -n C-WheelUpPane select-pane -t= \; copy-mode -e \; send-keys -M
-bind -t vi-copy    C-WheelUpPane   halfpage-up
-bind -t vi-copy    C-WheelDownPane halfpage-down
-bind -t emacs-copy C-WheelUpPane   halfpage-up
-bind -t emacs-copy C-WheelDownPane halfpage-down
 
-#set-option -g mouse-select-window on
-#set-window-option -g mode-mouse on
-#set -g mouse-utf8 off
+bind-key -T copy-mode-vi C-WheelUpPane send -X halfpage-up
+bind-key -T copy-mode-vi C-WheelDownPane send -X halfpage-down
 
-set -g default-terminal "screen-256color"
-set -g default-shell $SHELL
-set -g default-command "reattach-to-user-namespace -l ${SHELL}"
-set -g history-limit 10000
