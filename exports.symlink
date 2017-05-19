@@ -1,5 +1,5 @@
-# Make vim the default editor
-export EDITOR='subl -w'
+# Make nvim the default editor
+export EDITOR='nvim'
 # Don’t clear the screen after quitting a manual page
 export MANPAGER="less -X"
 # Highlight section titles in manual pages
@@ -19,5 +19,5 @@ export CC=gcc
 #export DYLD_LIBRARY_PATH="/usr/local/mysql/lib:$DYLD_LIBRARY_PATH"
 
 
-export LC_CTYPE=C 
+export LC_CTYPE=C
 export LANG=C
