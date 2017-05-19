@@ -1,0 +1,45 @@
+Pry.config.pager = false
+Pry.config.history.should_save = true
+Pry.config.history.file = "~/.pry_history"
+
+def r
+  reload!
+end
+
+def _cp(obj = Readline::HISTORY.entries[-2], *options)
+  if obj.respond_to?(:join) && !options.include?(:a)
+    if options.include?(:s)
+      obj = obj.map { |element| ":#{element.to_s}" }
+    end
+    out = obj.join(", ")
+  elsif obj.respond_to?(:inspect)
+    out = obj.is_a?(String) ? obj : obj.inspect
+  end
+
+  if out
+    IO.popen('pbcopy', 'w') { |io| io.write(out) }
+    "copied!"
+  end
+end
+
+##################
+# Crystal Specific
+##################
+
+def charlie
+  User.find(184928)
+end
+
+def corgi
+  Site.find(1079)
+end
+
+def init_balanced
+  Balanced.configure(ENV['BALANCED_API_KEY'])
+end
+
+def init_stripe
+  Stripe.api_key = ENV['STRIPE_API_KEY']
+end
+
+Signal.trap('SIGWINCH', proc { y, x = `stty size`.split.map(&:to_i) } )
