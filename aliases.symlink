@@ -8,25 +8,51 @@ alias -- -="cd -"
 #SSH Config
 alias sshconfig="v ~/.ssh/config"
 
+# Editing
+alias e="nvim"
+alias v="nvim"
+alias todo="nvim ~/todo.txt"
+
 # Shortcuts
 alias d="cd ~/Dropbox"
 alias dl="cd ~/Downloads"
 alias dt="cd ~/Desktop"
 alias dev="cd ~/Dropbox/Dev"
-alias g="git"
-alias gt="gittower"
-alias wtf="git-wtf"
-alias h="heroku"
-alias v="vim"
-alias s="/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl"
+#alias h="heroku"
+#alias s="/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl"
 alias ios='open /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone\ Simulator.app'
-alias tma='tmux attach'
+#alias tma='tmux attach'
 alias pdev='psql -d crystal_dev'
-alias fm='cd ~/dev/crystal && ./server'
+alias fm='cd ~/dev/crystal && ./bin/server'
 alias reload='source ~/.bash_profile'
-alias xtail='tail -f log/development.log |grep XXX'
+alias xtail='cd ~/dev/crystal && tail -f log/development.log |grep XXX'
 alias devtail='tail -f log/development.log'
 alias tmn='cd ~/dev/crystal && tmux'
+alias nr='crystal addons:open newrelic'
+alias le='crystal addons:open logentries'
+alias prodsql='crystal pg:psql'
+alias folsql='crystal pg:psql NAVY'
+alias prodconsole='crystal run console'
+
+# Git shortcuts
+alias g="git"
+alias gs="git s"
+alias gc="git c"
+alias gcp="git c; git push"
+alias gr="git r"
+alias gp="git p"
+alias gl="git l"
+alias aa="clear; git aa"
+alias discard="clear; git checkout -p"
+alias gt="gittower"
+alias push="git push"
+alias publish="git push -u origin HEAD"
+alias wtf="git-wtf"
+alias commit="git commit"
+alias checkout="g checkout"
+alias branch="g checkout -b"
+alias amend="git c --amend"
+alias gpr="hub pull-request"
 
 # Detect which `ls` flavor is in use
 if ls --color > /dev/null 2>&1; then # GNU `ls`
@@ -151,9 +177,7 @@ alias fixairplay="sudo pkill coreaudiod"
 
 # Rails
 alias bx="bundle exec"
+alias be="bundle exec"
 alias binst="bundle install"
-alias rc="spring rails console"
-alias r="spring rake"
-alias rake="spring rake"
-alias rails="spring rails"
-alias rspec="spring rspec"
+alias rc="cd ~/dev/crystal && bin/rails console"
+alias rk="bin/rake"
