@@ -1,98 +1,113 @@
+" You want Vim, not vi. When Vim finds a vimrc, 'nocompatible' is set anyway.
+" we set it explicitly to make our position clear!
+set nocompatible
+
+filetype off " required for Vundle
+
+" Don't create backup files or use temporary swap
 set nobackup
 set nowritebackup
 set noswapfile
-set nocompatible
-set title
-set visualbell
-set noerrorbells
-set clipboard=unnamed
-filetype off
+
+set autowrite " Automatically :write before running commands
 
 " Define bundles via Github repos
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
-Plugin 'VundleVim/Vundle.vim'
-Plugin 'ctrlpvim/ctrlp.vim'
-Plugin 'danro/rename.vim'
-Plugin 'dracula/vim'
-Plugin 'ervandew/supertab'
-Plugin 'mileszs/ack.vim'
-Plugin 'scrooloose/syntastic'
-Plugin 'scrooloose/nerdcommenter'
-Plugin 'terryma/vim-multiple-cursors'
-Plugin 'thoughtbot/vim-rspec'
-Plugin 'tomtom/tcomment_vim'
-Plugin 'tpope/vim-endwise'
-Plugin 'tpope/vim-eunuch'
-Plugin 'tpope/vim-fugitive'
-Plugin 'tpope/vim-unimpaired'
-Plugin 'tpope/vim-rails'
-Plugin 'tpope/vim-surround'
-Plugin 'vim-ruby/vim-ruby'
-Plugin 'vim-scripts/cmdalias.vim'
+Plugin 'VundleVim/Vundle.vim'             " Vundle package manager
+
+Plugin 'benmills/vimux'
+Plugin 'christoomey/vim-tmux-navigator'   " navigate between vim splits / tmux panes
+Plugin 'ctrlpvim/ctrlp.vim'               " Fuzzy finder
+Plugin 'dracula/vim'                      " Dracula color theme
+Plugin 'ervandew/supertab'                " Tab-completion in insert mode
+Plugin 'janko-m/vim-test'                 " RSpec bindings
+Plugin 'w0rp/ale'                         " Async Linting Engine
+Plugin 'scrooloose/nerdcommenter'         " Commenting
+Plugin 'scrooloose/nerdtree'              " File browser
+Plugin 'tpope/vim-eunuch'                 " helpers for Unix shell cmds (move, rename, etc)
+Plugin 'tpope/vim-unimpaired'             " Text manipulation helpers
+Plugin 'tpope/vim-rails'                  " Rails helpers
+Plugin 'tpope/vim-surround'               " Gives s modifier to surround/delete quotes/parents
+Plugin 'vim-ruby/vim-ruby'                " Ruby helpers
+Plugin 'vim-scripts/cmdalias.vim'         " Simple command aliases
+Plugin 'Konfekt/FastFold'                 " Folding performance improvement
+Plugin 'tpope/vim-fugitive'               " Git commands
+Plugin 'tpope/vim-rhubarb'                " Open current file / lines in Github
+Plugin 'airblade/vim-gitgutter'           " Adds visual indicators of git diff in gutter
+Plugin 'elixir-lang/vim-elixir'
+Plugin 'chrisbra/csv.vim'
+Plugin 'mzlogin/vim-markdown-toc'
+Plugin 'OmniSharp/omnisharp-vim'
+Plugin 'Valloric/YouCompleteMe'
 call vundle#end()
-filetype plugin indent on
 
-" ----------------------------------------------------------------------------
-"  Ctrl-P Settings
-" ----------------------------------------------------------------------------
-set wildignore+=*/tmp/*,*/.git/*,*/log/*,*/vcr/*,*/node_modules/*,*/cache/*,*/.sass-cache/*,
-set wildignore+=*.so,*.swp,*.zip,*.class,*.dat,*.db,*.dll,*.dylib,*.eot,*.eps,*.exe,*.fla,*.gif,*.ico,*.idb,*.jpg,*.lib,*.log,*.mp3,*.ncb,*.o,*.obj,*.pdb,*.psd,*.png,*.pyc,*.pyo,*.scssc,*.sdf,*.so,*.sock,*.sublime-*,*.suo,*.svg,*.ttf,*.woff,*.DS_Store
+filetype plugin indent on " Load plugins according to detected filetype.
+syntax on " Enable syntax highlighting.
 
-" ----------------------------------------------------------------------------
-"  Text Formatting
-" ----------------------------------------------------------------------------
+" Exclude Javascript files in :Rtags via rails.vim due to warnings when parsing
+let g:Tlist_Ctags_Cmd="ctags --exclude='*.js'"
 
-set autowrite
+" files to ignore
+" ----------------------------------------------------------------------------
+set wildignore+=*/tmp/*,*/.git/*,*/log/*,*/vcr/*,*/node_modules/*,*/cache/*,*/.sass-cache/*
+
+set wildignore+=*.so,*.swp,*.zip,*.class,*.dat,*.db,*.dll,*.dylib,*.eot,*.eps,*.exe,*.fla,*.gif
+set wildignore+=*.ico,*.idb,*.jpg,*.lib,*.log,*.mp3,*.ncb,*.o,*.obj,*.pdb,*.psd,*.png,*.pyc,*.pyo
+set wildignore+=*.scssc,*.sdf,*.so,*.sock,*.sublime-*,*.suo,*.svg,*.ttf,*.woff,*.DS_Store,.*.un*
+
+set foldmethod=indent
+set foldlevel=99
+
+"  text formatting
+" ----------------------------------------------------------------------------
 set autoindent             " automatic indent new lines
 set smartindent            " be smart about it
-inoremap # X<BS>#
 set nowrap                 " do not wrap lines
-set softtabstop=2
-set shiftwidth=2
-set tabstop=2
-set expandtab              " expand tabs to spaces
-set smarttab
 set formatoptions+=n       " support for numbered/bullet lists
-"set textwidth=80           " wrap at 80 chars by default
 set virtualedit=block      " allow virtual edit in visual block ..
-syntax on
-set background=dark
+
+" Softtabs, 2 spaces
+set tabstop=2
+set shiftwidth=2
+set shiftround
+set expandtab
+set smarttab
+
+" Use one space, not two, after punctuation.
 set nojoinspaces
 
-" Display extra whitespace
-set list listchars=tab:»·,trail:·,nbsp:·
+set background=dark
+set cursorline
 
-" Make it obvious where 80 characters is
-set textwidth=80
-set colorcolumn=+1
+" Put plugins and dictionaries in this dir (also on Windows)
+let vimDir = '$HOME/.vim'
+let &runtimepath.=','.vimDir
 
-" Open new split panes to right and bottom, which feels more natural
-set splitbelow
-set splitright
-
-let g:rspec_command = "!clear && bin/rspec {spec}"
-
-
-" solarized options
-" let g:solarized_visibility = "high"
-" let g:solarized_contrast = "high"
-" let g:solarized_termcolors = 256
-" let g:solarized_termtrans = 1
-" colorscheme solarized
-color dracula
+" Keep undo history across sessions by storing it in a file
+if has('persistent_undo')
+    let myUndoDir = expand(vimDir . '/undo')
+    " Create dirs
+    call system('mkdir ' . vimDir)
+    call system('mkdir ' . myUndoDir)
+    let &undodir = myUndoDir
+    set undofile
+endif
 
 " Use The Silver Searcher https://github.com/ggreer/the_silver_searcher
 if executable('ag')
   " Use Ag over Grep
   set grepprg=ag\ --nogroup\ --nocolor
 
-  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
-  let g:ctrlp_user_command = 'ag -Q -l --nocolor --hidden -g "" %s'
+  " Use ag in CtrlP for listing files. Lightning fast and respesdts .gitignore
+  let g:ctrlp_user_command = 'ag --ignore ''**.js'' --ignore ''**.scss'' --ignore ''.happypack/*'' --follow --skip-vcs-ignores --literal --files-with-matches --nocolor --hidden -g "" %s'
 
   " ag is fast enough that CtrlP doesn't need to cache
   let g:ctrlp_use_caching = 0
-  let g:ackprg = 'ag --vimgrep'
+  let g:ctrlp_cache_dir = '/tmp/ctrlp'
+
+  let g:NERDTreeChDirMode       = 2
+  let g:ctrlp_working_path_mode = 'rw'
 
   if !exists(":Ag")
     command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
@@ -100,8 +115,37 @@ if executable('ag')
   endif
 endif
 
-" Cursor Switching
+let g:loaded_sql_completion = 0
+let g:omni_sql_no_default_maps = 1
 
+" UI settings
+" -----------------------------------------------------------------------------
+color dracula              " Use dracula theme
+set ruler                  " show the cursor position all the time
+set noshowcmd              " don't display incomplete commands
+"set nolazyredraw           " turn off lazy redraw
+set number                 " line numbers
+set wildmenu               " turn on wild menu
+set wildmode=list:longest,full
+set ch=1                   " command line height
+set backspace=2            " allow backspacing over everything in insert mode
+set whichwrap+=<,>,h,l,[,] " backspace and cursor keys wrap to
+set shortmess=filtIoOA     " shorten messages
+set report=0               " tell us about changes
+set nostartofline          " don't jump to the start of line when scrolling
+
+" Open new split panes to right and bottom, which feels more natural
+set splitbelow
+set splitright
+
+" Display extra whitespace
+"set list listchars=tab:»·,trail:·,nbsp:·
+
+" Make it obvious where 100 characters is
+set textwidth=100
+set colorcolumn=+1
+
+" different cursors for normal vs insert mode
 if exists('$TMUX')
   let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
   let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
@@ -110,32 +154,163 @@ else
   let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 endif
 
-" ----------------------------------------------------------------------------
-"  Remapping
-" ----------------------------------------------------------------------------
+" visual cues
+set showmatch              " brackets/braces that is
+set mat=5                  " duration to show matching brace (1/10 sec)
+set ignorecase             " ignore case when searching
+set smartcase              " case sensitive search when upcase is present
+set incsearch              " do incremental searching
+set nohlsearch             " don't highlight searches
+set visualbell
+set noerrorbells
 
-" reformat file
-nnoremap <Leader>= mmgg=G`m<CR>
+" Statusline
+set laststatus=2 " always show the status line
+set statusline=%f
+set statusline+=\ %h%m%r
+set statusline+=%=%-14.(%l,%c%V%)
+set statusline+=\ %#warningmsg#
+"set statusline+=\ %{SyntasticStatuslineFlag()}
+hi StatusLine ctermfg=231 ctermbg=240 cterm=bold guifg=#f8f8f2 guibg=#64666d gui=bold
+hi StatusLineNC ctermfg=231 ctermbg=236 cterm=NONE guifg=#f8f8f2 guibg=#64666d gui=NONE
+"set statusline+=%*
 
-" lead with ,
+" ale configuration
+let g:ale_ruby_reek_show_wiki_link  = 1
+" configure syntastic syntax checking to check on open as well as save
+"let g:syntastic_always_populate_loc_list = 0
+"let g:syntastic_auto_loc_list = 0
+"let g:syntastic_check_on_open = 1
+"let g:syntastic_check_on_wq = 0
+"let g:syntastic_html_tidy_ignore_errors=[" proprietary attribute \"ng-"]
+"let g:syntastic_eruby_ruby_quiet_messages =
+      "\ {"regex": "assigned but unused variable"}
+"let g:syntastic_ruby_checkers = ['mri', 'rubocop']
+
+" Leader Bindings
+" -----------------------------------------------------------------------------
+
+" spacebar for leader key
 let mapleader = "\<Space>"
-nnoremap <Leader>o :CtrlP<CR>
-nnoremap <Leader>w :w<CR>
 
-" Insert a pry statement
-nmap <leader>bp orequire "pry"; ::Kernel.binding.pry<esc>^
+" Puts debug
+nmap <leader>d puts '#'*90<esc>oputs '#'*90<esc>o<esc>kOputs <esc>i
 
 " Switch between the last two files
-nnoremap <leader><leader> <c-^>
+nnoremap <NUL> <c-^>
+nnoremap <c-space> <c-^>
 
-" exit to normal mode with 'jj'
+" reformat file
+"nnoremap <leader>= mmgg=G`m<CR>
+
+" Rspec command shortcuts
+"let g:rspec_command = "Start bin/rspec --format documentation {spec}"
+let test#strategy = "vimux"
+"let test#ruby#rspec#executable="bin/rspec"
+let test#ruby#rspec#executable = "bin/rspec"
+"let test#ruby#rspec#options = "--format documentation"
+let VimuxUseNearest = 1
+let g:VimuxHeight = "40"
+
+"nnoremap <f10> :VimuxZoomRunner<CR>
+"inoremap <f10> <Esc>:VimuxZoomRunner<CR>
+
+nnoremap <f10> :call _VimuxTmux("resize-pane -Z -t ".g:VimuxRunnerIndex) <bar> :call _VimuxTmux("copy-mode")<CR>
+inoremap <f10> :call _VimuxTmux("resize-pane -Z -t ".g:VimuxRunnerIndex) <bar> :call _VimuxTmux("copy-mode")<CR>
+
+nnoremap <leader>t :TestFile<CR>
+nnoremap <leader>r :TestNearest<CR>
+nnoremap <leader>e :VimuxRunLastCommand<CR>
+
+"jump to alternate
+nnoremap <leader>a :A<CR>
+
+" Show current file in Github.com (fugitive)
+nnoremap <leader>g :Gbrowse<CR>
+vmap <leader>g :Gbrowse<CR>
+
+" Git blame
+nnoremap <leader>b :Gblame<CR>
+
+" CtrlP jump to file
+nnoremap <leader>o :CtrlP<CR>
+" CtrlP jump to tag in current buffer
+nnoremap <leader>m :CtrlPBufTag<CR>
+" Explore fodler of the current file
+map <leader>f :e <C-R>=expand("%:p:h") . "/" <CR><CR>
+
+" leader-w to save file
+nnoremap <leader>w :w<CR>
+
+" leader-q to quit
+nnoremap <leader>q :q<CR>
+
+" nerd commenter
+map <leader>/ <plug>NERDCommenterToggle<CR>
+
+" Yank from the cursor to the end of the line, to be consistent with C and D.
+nnoremap Y y$
+
+" Paste from previous register
+nnoremap <C-p> "1p
+
+" interact with Mac clipboard
+map <leader>y "*y
+map <leader>Y "*Y$
+map <leader>p "*p
+map <leader>P "*P
+
+" split screen
+map <leader>\ :vsp<CR>
+map <leader>- :sp<CR>
+
+" nerd tree
+map <leader>n :NERDTreeToggle<CR>
+map <leader>N :NERDTreeFind<CR>
+map <leader>s :e ~/scratch/
+
+"Quickfix Toggle
+command! -bang -nargs=? QFix call QFixToggle(<bang>0)
+function! QFixToggle(forced)
+  if exists("g:qfix_win") && a:forced == 0
+    cclose
+    unlet g:qfix_win
+  else
+    copen 10
+    let g:qfix_win = bufnr("$")
+  endif
+endfunction
+nnoremap <silent> <leader>l :QFix<CR>
+
+"Prettify JSON
+command! JSONpretty %!python -m json.tool
+
+" Rspec Syntax Conversion
+function! ConvertRspec()
+  let @a="Iexpect(\<esc>/\\.should\\sct ).to\<esc>"
+  :g/\.should\s/norm! @a
+  let @a="Iexpect(\<esc>/\\.should_not\\sct ).not_to\<esc>"
+  :g/\.should_not\s/norm! @a
+  :%s/\.to ==/.to eq/
+  :%s/\.not_to ==/.not_to eq/
+  let @a=""
+endfunction
+
+" Custom mapping
+" -----------------------------------------------------------------------------
+
+" exit to normal mode with 'jj', 'jk', or 'kk'
 inoremap jj <ESC>
 inoremap kk <ESC>
 inoremap jk <ESC>
+inoremap kj <ESC>
 
-" reflow paragraph with Q in normal and visual mode
-nnoremap Q gqap
-vnoremap Q gq
+" remap ; to :
+nnoremap ; :
+vnoremap ; :
+
+" ctrl-c acts like normal escape from insert mode
+inoremap <C-c> <ESC>
 
 " sane movement with wrap turned on
 nnoremap j gj
@@ -147,90 +322,104 @@ nnoremap <Up> gk
 vnoremap <Down> gj
 vnoremap <Up> gk
 
-" unimpaired
-" Bubble single lines
-nmap <C-k> [e
-nmap <C-j> ]e
+" K to split lines
+nnoremap K i<CR><Esc>
 
-" Bubble multiple lines
-vmap <C-k> [egv
-vmap <C-j> ]egv
+" Select all
+"map <C-a> <esc>ggVG<CR>
 
-"nnoremap <F2> :set invpaste paste?<CR>
-"imap <F2> <C-O>:set invpaste paste?<CR>
-set pastetoggle=<F2>
-" ----------------------------------------------------------------------------
-"  UI
-" ----------------------------------------------------------------------------
+" Unbind Q
+"map Q <Nop>
+"map q <Nop>
 
-set ruler                  " show the cursor position all the time
-set noshowcmd              " don't display incomplete commands
-set nolazyredraw           " turn off lazy redraw
-set number                 " line numbers
-set wildmenu               " turn on wild menu
-set wildmode=list:longest,full
-set ch=2                   " command line height
-set backspace=2            " allow backspacing over everything in insert mode
-set whichwrap+=<,>,h,l,[,] " backspace and cursor keys wrap to
-set shortmess=filtIoOA     " shorten messages
-set report=0               " tell us about changes
-set nostartofline          " don't jump to the start of line when scrolling
+" Enable basic mouse behavior such as resizing buffers.
+set mouse=a
 
+" Vimrc shortcut
+nnoremap <tab>vim :tabe ~/.vimrc<cr>
 
-" ----------------------------------------------------------------------------
-" Visual Cues
-" ----------------------------------------------------------------------------
+" Git config shortcut
+nnoremap <tab>git :tabe ~/.gitconfig<cr>
 
-set showmatch              " brackets/braces that is
-set mat=5                  " duration to show matching brace (1/10 sec)
-set incsearch              " do incremental searching
-set ignorecase
-set smartcase
-set hlsearch
-nmap \q :nohlsearch<CR>
-set laststatus=2           " always show the status line
-set ignorecase             " ignore case when searching
-set nohlsearch             " don't highlight searches
-set visualbell             " shut up!
+" Tmux config shortcut
+nnoremap <tab>tmux :tabe ~/.tmux.conf<cr>
 
-" ---------------------------------------------------------------------------
-"  Strip all trailing whitespace in file
-" ---------------------------------------------------------------------------
+" Simpler redo shortcut
+nmap U <c-r>
 
-" configure syntastic syntax checking to check on open as well as save
-let g:syntastic_check_on_open=1
-let g:syntastic_html_tidy_ignore_errors=[" proprietary attribute \"ng-"]
-let g:syntastic_eruby_ruby_quiet_messages =
-    \ {"regex": "possibly useless use of a variable in void context"}
+" x to delete without copying, X to delete line without copying
+nnoremap x "_x
+vnoremap x "_x
+nnoremap X "_dd
+vnoremap X "_dd
 
-function! StripWhitespace ()
-  exec ':%s/ \+$//gc'
-endfunction
-map ,s :call StripWhitespace ()<CR>
+" Bind Shift-H/Shift-L to beginning / end of line
+nnoremap H ^
+vnoremap H ^
+nnoremap L $
+vnoremap L $
 
-" cmap w!! w !sudo tee % > /dev/null
+" Jump to beginning / end of line in insert mode
+inoremap <C-a> <ESC>^i
+inoremap <C-e> <ESC>$a
 
-" Rspec
-nnoremap <Leader>t :call RunCurrentSpecFile()<CR>
-nnoremap <Leader>r :call RunNearestSpec()<CR>
-nnoremap <Leader>e :call RunLastSpec()<CR>
+" Semicolon to enter console
+"nnoremap ; :
+"vnoremap ; :
 
-" Ctrl-p
-nnoremap <Leader>m :CtrlPBufTag<CR>
-nnoremap <D-r> :CtrlPBufTag<CR>
-nnoremap Q <Nop>
-nnoremap q <Nop>
+" Open the current file with Mac default app
+nnoremap <silent> <F5> :!open %:p<CR><CR>
 
-" nerd commenter
-map <leader>/ <plug>NERDCommenterToggle<CR>
-:nmap ; :
+if has("autocmd")
+  " remove trailing white spaces
+  fun! StripTrailingWhitespace()
+      " Don't strip on these filetypes
+      if &ft =~ 'markdown'
+          return
+      endif
+      %s/\s\+$//e
+  endfun
+
+  autocmd BufWritePre * call StripTrailingWhitespace()
+
+  " Disable auto-commenting
+  autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+
+endif
+
+" Formatting Rules for Markdown
+augroup Markdown
+  autocmd!
+  autocmd BufNew,BufRead *.md setlocal textwidth=80 wrapmargin=0
+augroup END
+
+" Neovim window navigation
+if has('nvim')
+  :tnoremap <A-h> <C-\><C-n><C-w>h
+  :tnoremap <A-j> <C-\><C-n><C-w>j
+  :tnoremap <A-k> <C-\><C-n><C-w>k
+  :tnoremap <A-l> <C-\><C-n><C-w>l
+  :nnoremap <A-h> <C-w>h
+  :nnoremap <A-j> <C-w>j
+  :nnoremap <A-k> <C-w>k
+  :nnoremap <A-l> <C-w>l
+endif
 
 " Aliases
+" -----------------------------------------------------------------------------
+" generic, typo-preventing aliases
 au VimEnter * if exists("loaded_cmdalias") |
       \ call CmdAlias('WQ','wq') |
       \ call CmdAlias('Wq','wq') |
       \ call CmdAlias('W','w') |
       \ call CmdAlias('Q','q') |
       \ call CmdAlias('E','e') |
-      \ endif
-"command! -bang Q quit<bang>
+
+" vim-rails specific aliases
+au VimEnter * if exists("loaded_cmdalias") |
+      \ call CmdAlias('em','Emodel') |
+      \ call CmdAlias('ec','Econtroller') |
+      \ call CmdAlias('ev','Eview') |
+      \ call CmdAlias('av','AV') |
+      \ call CmdAlias('Av','AV') |
+      \ call CmdAlias('a','A') |
