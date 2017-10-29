@@ -1,6 +1,8 @@
+[init]
+  templatedir = ~/.git_template
 [alias]
   # View the SHA, description, and history graph of the latest 20 commits
-  l = log --pretty=oneline -n 20 --graph
+  l = log --pretty=oneline -n 20 --graph --decorate
 
   # pretty one-line log with tags, branches and authors
   ls = log --pretty=format:'%C(yellow)%h %C(blue)%ad%C(red)%d %C(reset)%s%C(green) [%cn]' --decorate --date=short
@@ -10,6 +12,7 @@
 
   # View the current working tree status using the short format
   s = status -sb
+  st = status -sb
 
   # Show the diff between the latest commit and the current state
   d = !"git diff-index --quiet HEAD -- || clear; git diff --patch-with-stat"
@@ -17,17 +20,23 @@
   # `git di $number` shows the diff between the state `$number` revisions ago and the current state
   di = !"d() { git diff --patch-with-stat HEAD~$1; }; git diff-index --quiet HEAD -- || clear; d"
 
+  conflicts = diff --name-only --diff-filter=U
+
   # Pull in remote changes for the current repository and all its submodules
   p = !"git pull; git submodule foreach git pull origin master"
 
-  # Clone a repository including all submodules
-  c = clone --recursive
+  publish = "push -u origin HEAD"
 
-  # Ditch
-  ditch=!git add -A && git commit -m "TMP: Save before clean reset" && git reset HEAD~1 --hard
+  # Clone a repository including all submodules
+  # c = clone --recursive
+
+  c = commit --verbose
+
+  # Mark all files and start staging interactively
+  aa=!git add -N . && git add -p
 
   # Commit all changes
-  ca = !git add -A && git commit -av
+  ca = !git add -A . && git commit -av
 
   # Checkout
   co = checkout
@@ -40,14 +49,16 @@
   branches = branch -a
   remotes = remote -v
 
-  # Credit an author on the latest commit
-  credit = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"
+  force = push --force-with-lease
 
   # rebase
-  reb = pull --rebase=preserve
+  r = pull --rebase=preserve
+
+  # amend
+  amend = commit --amend
 
   # Interactive rebase with the given number of latest commits
-  rewrite = "!r() { git rebase --preserve-merges --autosquash -i HEAD~$1; }; r"
+  rewrite = "!grw() { git rebase -i HEAD~${1:-10}; }; grw"
 
   # Reflog with dates
   ref = reflog --date=local
@@ -57,7 +68,9 @@
 
   # Search!
   search = "!search() { git log --pretty=format:'%C(yellow)%h (%an %ar) %s' --name-only -S$1; }; search"
-	dfw = diff --ignore-space-change
+  dfw = diff --ignore-space-change
+
+  url =! bash -c 'git config --get remote.github.url | sed -E "s/.+:\\(.+\\)\\.git$/https:\\\\/\\\\/github\\\\.com\\\\/\\\\1/g"'
 
 [apply]
   # Detect whitespace errors when applying a patch
@@ -85,14 +98,16 @@
   untracked = cyan
 
 [color "diff-highlight"]
-  oldNormal = "red bold"
-  oldHighlight = "red bold 52"
-  newNormal = "green bold"
-  newHighlight = "green bold 22"
+	oldNormal = red bold
+	oldHighlight = red bold 52
+	newNormal = green bold
+	newHighlight = green bold 22
+
 [merge]
   # Include summaries of merged commits in newly created merge commit messages
   log = true
-	tool = sublime
+  tool = vimdiff
+  prompt = false
 
  # Use `origin` as the default remote on the `master` branch in all cases
  [branch "master"]
@@ -106,37 +121,42 @@
   quotepath = false
   excludesfile = ~/.gitignore
   whitespace = space-before-tab,indent-with-non-tab,trailing-space
-  editor = "subl -w"
-  pager = bash -lc 'diff-highlight | strip_diff_leading_symbols | less -r' -
+  editor = "nvim"
+  pager = diff-so-fancy | less --tabs=4 -RFX
 
 [mergetool]
-	keepBackup = true
+  keepBackup = true
+  prompt = false
 
 [diff]
-	mnemonicprefix = true
-	renames = copies
+  mnemonicprefix = true
+  renames = copies
+  tool = icdiff
+
+[difftool]
+  prompt = false
+
+[difftool "icdiff"]
+  cmd = /usr/local/bin/icdiff --line-numbers $LOCAL $REMOTE
+
+[pager]
+  difftool = true
 
 [diff "nodiff"]
 	command = /usr/bin/true
 
 [push]
-	default = tracking
+	default = current
 
 [apply]
 	whitespace = nowarn
 
 # [branch]
 # 	autosetuprebase = always
-
-[difftool "sublime"]
-  cmd = subl -w "$LOCAL" "$REMOTE"
-  trustExitCode = false
-
-[mergetool "sublime"]
-  cmd = subl -w $MERGED
-  trustExitCode = false
 [filter "lfs"]
 	clean = git-lfs clean %f
 	smudge = git-lfs smudge %f
 	required = true
-[difftool]
+[gitsh]
+	defaultCommand = status -sb
+  gitCommand = /usr/local/bin/hub
