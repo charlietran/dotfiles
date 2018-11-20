@@ -1,14 +1,24 @@
 # -- general -------------------------------------------------------------------
 
-set -g default-terminal "screen-256color" # colors!
+# Allow for 256 colors
+set -g default-terminal "screen-256color"
 setw -g xterm-keys on
-set -s escape-time 0                     # faster command sequences
-set -sg repeat-time 600                   # increase repeat timeout
+
+# Faster command sequences
+set -s escape-time 0
+
+# Set the time a key is held down until timeout
+set -sg repeat-time 600
 set -s focus-events on
 
 set -g default-shell $SHELL
+
+# OSX-specific clipboard workaround
+# See: https://github.com/ChrisJohnsen/tmux-MacOSX-pasteboard
 set -g default-command "reattach-to-user-namespace -l ${SHELL}"
-set -g history-limit 10000                # boost history to 10k lines
+
+# Each pane gets 10k lines of history
+set -g history-limit 10000
 
 # Set command prefix to ctrl-g
 set-option -g prefix C-g
@@ -22,29 +32,32 @@ bind r source-file ~/.tmux.conf
 # prefix, e to open tmux config in editor
 bind e new-window -n '~/.tmux.conf' "sh -c '\${EDITOR:-vim} ~/.tmux.conf && tmux source ~/.tmux.conf && tmux display \"~/.tmux.conf sourced\"'"
 
-# Panes
+# Panes. Bind prefix,\ and prefix,- to split windows
 unbind %
 bind \ split-window -h
 bind - split-window -v
 
 # Window Navigation
-bind-key -n S-Left prev
-bind-key -n S-Right next
-bind -n S-down new-window
-bind-key -n M-tab next
-bind -n M-n new-window
+  # Shift-Left and Shift-Right navs between windows
+  bind-key -n S-Left prev
+  bind-key -n S-Right next
+  # Alternately, option-tab to cycle through windows
+  bind-key -n M-tab next
+  # Shift-Down creates a new window
+  bind -n S-down new-window
+  # Alternately, option-n to create new window
+  bind -n M-n new-window
 
-bind-key -n M-1 select-window -t :1
-bind-key -n M-2 select-window -t :2
-bind-key -n M-3 select-window -t :3
-bind-key -n M-4 select-window -t :4
-bind-key -n M-5 select-window -t :5
-bind-key -n M-6 select-window -t :6
-bind-key -n M-7 select-window -t :7
-bind-key -n M-8 select-window -t :8
-bind-key -n M-9 select-window -t :9
-bind C-l send-keys 'C-l'
-bind C-k send-keys 'C-k'
+  # Option 1-9 to switch to a specific window
+  bind-key -n M-1 select-window -t :1
+  bind-key -n M-2 select-window -t :2
+  bind-key -n M-3 select-window -t :3
+  bind-key -n M-4 select-window -t :4
+  bind-key -n M-5 select-window -t :5
+  bind-key -n M-6 select-window -t :6
+  bind-key -n M-7 select-window -t :7
+  bind-key -n M-8 select-window -t :8
+  bind-key -n M-9 select-window -t :9
 
 #set -g -a terminal-overrides ',*:Ss=\E[%p1%d q:Se=\E[2 q'
 
@@ -58,6 +71,11 @@ bind-key -n C-l run "($is_vim && tmux send-keys C-l) || tmux select-pane -R"
 bind-key -n C-j run "(($is_vim || $is_fzf) && tmux send-keys C-j) || tmux select-pane -D"
 bind-key -n C-k run "(($is_vim || $is_fzf) && tmux send-keys C-k) || tmux select-pane -U"
 bind-key -n M-` run "($is_vim && tmux send-keys f10) || tmux last-pane"
+
+# Control-L and Control-K Passthrough
+# Prefix,Ctrl-L / Prefix,Ctrl-K sends those keystrokes directly to terminal
+bind C-l send-keys 'C-l'
+bind C-k send-keys 'C-k'
 
 bind-key -r -T prefix h resize-pane -L
 bind-key -r -T prefix j resize-pane -D
