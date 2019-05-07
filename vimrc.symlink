@@ -171,12 +171,16 @@ set nohlsearch             " don't highlight searches
 set visualbell
 set noerrorbells
 
+" Gutentags
+"let g:gutentags_trace = 1
+
 " Statusline
 set laststatus=2 " always show the status line
 set statusline=%f
 set statusline+=\ %h%m%r
 set statusline+=%=%-14.(%l,%c%V%)
 set statusline+=\ %#warningmsg#
+set statusline+=\ %{gutentags#statusline()}
 "set statusline+=\ %{SyntasticStatuslineFlag()}
 hi StatusLine ctermfg=231 ctermbg=240 cterm=bold guifg=#f8f8f2 guibg=#64666d gui=bold
 hi StatusLineNC ctermfg=231 ctermbg=236 cterm=NONE guifg=#f8f8f2 guibg=#64666d gui=NONE
@@ -184,6 +188,15 @@ hi StatusLineNC ctermfg=231 ctermbg=236 cterm=NONE guifg=#f8f8f2 guibg=#64666d g
 
 " ale configuration
 let g:ale_ruby_reek_show_wiki_link  = 1
+
+" use Prettier for JS and HTML
+let g:ale_fixers = {
+\   'javascript': ['prettier','eslint'],
+\   'css': ['prettier'],
+\   'html': ['prettier'],
+\}
+let g:ale_fix_on_save = 1
+
 " configure syntastic syntax checking to check on open as well as save
 "let g:syntastic_always_populate_loc_list = 0
 "let g:syntastic_auto_loc_list = 0
