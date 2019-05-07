@@ -11,46 +11,53 @@ set noswapfile
 
 set autowrite " Automatically :write before running commands
 
-" Define bundles via Github repos
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-Plugin 'VundleVim/Vundle.vim'             " Vundle package manager
+" Install vim-plug for NeoVim with this cmd:
+" curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
-Plugin 'benmills/vimux'
-Plugin 'christoomey/vim-tmux-navigator'   " navigate between vim splits / tmux panes
-Plugin 'ctrlpvim/ctrlp.vim'               " Fuzzy finder
-Plugin 'dracula/vim'                      " Dracula color theme
-Plugin 'ervandew/supertab'                " Tab-completion in insert mode
-Plugin 'janko-m/vim-test'                 " RSpec bindings
-Plugin 'w0rp/ale'                         " Async Linting Engine
-Plugin 'scrooloose/nerdcommenter'         " Commenting
-Plugin 'scrooloose/nerdtree'              " File browser
-Plugin 'tpope/vim-eunuch'                 " helpers for Unix shell cmds (move, rename, etc)
-Plugin 'tpope/vim-unimpaired'             " Text manipulation helpers
-Plugin 'tpope/vim-rails'                  " Rails helpers
-Plugin 'tpope/vim-surround'               " Gives s modifier to surround/delete quotes/parents
-Plugin 'vim-ruby/vim-ruby'                " Ruby helpers
-Plugin 'vim-scripts/cmdalias.vim'         " Simple command aliases
-Plugin 'Konfekt/FastFold'                 " Folding performance improvement
-Plugin 'tpope/vim-fugitive'               " Git commands
-Plugin 'tpope/vim-rhubarb'                " Open current file / lines in Github
-Plugin 'airblade/vim-gitgutter'           " Adds visual indicators of git diff in gutter
-Plugin 'elixir-lang/vim-elixir'
-Plugin 'chrisbra/csv.vim'
-Plugin 'mzlogin/vim-markdown-toc'
-Plugin 'OmniSharp/omnisharp-vim'
-Plugin 'Valloric/YouCompleteMe'
-call vundle#end()
+call plug#begin()
+Plug 'benmills/vimux'
+Plug 'christoomey/vim-tmux-navigator'   " navigate between vim splits / tmux panes
+Plug 'ctrlpvim/ctrlp.vim'               " Fuzzy finder
+Plug 'dracula/vim'                      " Dracula color theme
+Plug 'ervandew/supertab'                " Tab-completion in insert mode
+Plug 'janko-m/vim-test'                 " RSpec bindings
+Plug 'w0rp/ale'                         " Async Linting Engine
+Plug 'scrooloose/nerdcommenter'         " Commenting
+Plug 'tpope/vim-eunuch'                 " helpers for Unix shell cmds (move, rename, etc)
+Plug 'tpope/vim-unimpaired'             " Text manipulation helpers
+Plug 'tpope/vim-rails'                  " Rails helpers
+Plug 'tpope/vim-surround'               " Gives s modifier to surround/delete quotes/parents
+Plug 'vim-ruby/vim-ruby'                " Ruby helpers
+Plug 'vim-scripts/cmdalias.vim'         " Simple command aliases
+Plug 'Konfekt/FastFold'                 " Folding performance improvement
+Plug 'tpope/vim-fugitive'               " Git commands
+Plug 'tpope/vim-rhubarb'                " Open current file / lines in Github
+Plug 'airblade/vim-gitgutter'           " Adds visual indicators of git diff in gutter
+Plug 'chrisbra/csv.vim'
+Plug 'mzlogin/vim-markdown-toc'
+Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
+Plug 'ludovicchabant/vim-gutentags'
+Plug 'AndrewRadev/linediff.vim'
+Plug 'pangloss/vim-javascript'
+Plug 'mxw/vim-jsx'
+call plug#end()
 
 filetype plugin indent on " Load plugins according to detected filetype.
 syntax on " Enable syntax highlighting.
 
 " Exclude Javascript files in :Rtags via rails.vim due to warnings when parsing
-let g:Tlist_Ctags_Cmd="ctags --exclude='*.js'"
+"let g:Tlist_Ctags_Cmd="ctags --exclude='*.js'"
 
 " files to ignore
 " ----------------------------------------------------------------------------
-set wildignore+=*/tmp/*,*/.git/*,*/log/*,*/vcr/*,*/node_modules/*,*/cache/*,*/.sass-cache/*
+set wildignore+=*/.git/*
+set wildignore+=*/node_modules/*
+set wildignore+=node_modules
+set wildignore+=*/tmp/*
+set wildignore+=*/log/*
+set wildignore+=*/vcr/*
+set wildignore+=*/cache/*
+set wildignore+=*/.sass-cache/*
 
 set wildignore+=*.so,*.swp,*.zip,*.class,*.dat,*.db,*.dll,*.dylib,*.eot,*.eps,*.exe,*.fla,*.gif
 set wildignore+=*.ico,*.idb,*.jpg,*.lib,*.log,*.mp3,*.ncb,*.o,*.obj,*.pdb,*.psd,*.png,*.pyc,*.pyo
