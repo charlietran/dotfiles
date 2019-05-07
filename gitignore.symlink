@@ -12,3 +12,7 @@
 /tmp/*
 /spec/tmp/*
 .dropbox
+/tags
+/tags.temp
+/tags.lock
+
