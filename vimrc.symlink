@@ -87,6 +87,10 @@ set nojoinspaces
 set background=dark
 set cursorline
 
+" Netrw File Browser Settings
+"""""""""""""""""""""""""""""
+let g:netrw_banner = 0            " Disable netrw (Ex) banner
+let g:netrw_liststyle = 3         " Use tree-style listing
 " Put plugins and dictionaries in this dir (also on Windows)
 let vimDir = '$HOME/.vim'
 let &runtimepath.=','.vimDir
@@ -107,7 +111,7 @@ if executable('ag')
   set grepprg=ag\ --nogroup\ --nocolor
 
   " Use ag in CtrlP for listing files. Lightning fast and respesdts .gitignore
-  let g:ctrlp_user_command = 'ag --ignore ''**.js'' --ignore ''**.scss'' --ignore ''.happypack/*'' --follow --skip-vcs-ignores --literal --files-with-matches --nocolor --hidden -g "" %s'
+  let g:ctrlp_user_command = 'ag --ignore ''_site/*'' --ignore ''.happypack/*'' --follow --skip-vcs-ignores --literal --files-with-matches --nocolor --hidden -g "" %s'
 
   " ag is fast enough that CtrlP doesn't need to cache
   let g:ctrlp_use_caching = 0
@@ -284,11 +288,6 @@ map <leader>P "*P
 map <leader>\ :vsp<CR>
 map <leader>- :sp<CR>
 
-" nerd tree
-map <leader>n :NERDTreeToggle<CR>
-map <leader>N :NERDTreeFind<CR>
-map <leader>s :e ~/scratch/
-
 "Quickfix Toggle
 command! -bang -nargs=? QFix call QFixToggle(<bang>0)
 function! QFixToggle(forced)
@@ -413,6 +412,12 @@ augroup Markdown
   autocmd BufNew,BufRead *.md setlocal textwidth=80 wrapmargin=0
 augroup END
 
+" Formatting Rules for Pico8
+augroup Pico8
+  autocmd!
+  autocmd BufNew,BufRead *.p8 set filetype=lua
+augroup END
+
 " Neovim window navigation
 if has('nvim')
   :tnoremap <A-h> <C-\><C-n><C-w>h
@@ -425,6 +430,10 @@ if has('nvim')
   :nnoremap <A-l> <C-w>l
 endif
 
+"Auto complete and re-indent HTML when typing </
+":inoremap <lt>/ </<C-x><C-o><Esc>==gi
+autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
+
 " Aliases
 " -----------------------------------------------------------------------------
 " generic, typo-preventing aliases
@@ -434,6 +443,7 @@ au VimEnter * if exists("loaded_cmdalias") |
       \ call CmdAlias('W','w') |
       \ call CmdAlias('Q','q') |
       \ call CmdAlias('E','e') |
+      \ call CmdAlias('ex','Ex') |
 
 " vim-rails specific aliases
 au VimEnter * if exists("loaded_cmdalias") |
