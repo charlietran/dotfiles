@@ -6,8 +6,10 @@ export PATH="$HOME/.rbenv/bin:$PATH"
 export PATH="/usr/local/bin:$PATH"
 export PATH="/usr/local/share/npm/bin:$PATH"
 export PATH="/usr/local/Cellar/go/1.2.1/libexec/bin:$PATH"
+export PATH="/Users/chatra/Library/Python/2.7/bin:$PATH"
 export PATH="/Users/chatra/Library/Python/3.7/bin:$PATH"
 
+export AWS_REGION="us-east-1"
 # Load the shell dotfiles, and then some:
 # * ~/.path can be used to extend `$PATH`.
 # * ~/.extra can be used for other settings you don’t want to commit.
