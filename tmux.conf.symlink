@@ -1,7 +1,8 @@
 # -- general -------------------------------------------------------------------
 
 # Allow for 256 colors
-set -g default-terminal "screen-256color"
+set -g default-terminal "tmux-256color"
+set -as terminal-overrides ',xterm*:Tc:sitm=\E[3m'
 setw -g xterm-keys on
 
 # Faster command sequences
@@ -34,7 +35,7 @@ bind e new-window -n '~/.tmux.conf' "sh -c '\${EDITOR:-vim} ~/.tmux.conf && tmux
 
 # Panes. Bind prefix,\ and prefix,- to split windows
 unbind %
-bind \ split-window -h
+bind \\ split-window -h
 bind - split-window -v
 
 # Window Navigation
@@ -106,6 +107,7 @@ set -g visual-activity on
 # -- display -------------------------------------------------------------------
 set -g base-index 1        # start windows numbering at 1
 set -g pane-base-index 1   # start pane numbering at 1
+set-option -g renumber-windows on # re-number windows after one is closed
 
 set -g status-left-length 32
 set -g status-right-length 150
@@ -123,6 +125,8 @@ set -g window-status-current-format "#[bg=colour203,fg=colour233,noreverse,bold]
 set -g status-right ''
 # set -g status-right '#[fg=colour39] #(battery-life) #(battery-time) #[fg=colour203] #(date +"%F %H:%M ")'
 
+
+
 # Mouse Support
 set -g mouse on
 bind -n WheelUpPane if-shell "$is_vim" "send-keys -M" "select-pane -t= \; copy-mode -e \; send-keys -M"
@@ -134,3 +138,7 @@ bind -n C-WheelUpPane select-pane -t= \; copy-mode -e \; send-keys -M
 bind-key -T copy-mode-vi C-WheelUpPane send -X halfpage-up
 bind-key -T copy-mode-vi C-WheelDownPane send -X halfpage-down
 
+# List of plugins
+set -g @plugin 'tmux-plugins/tpm'
+set -g @plugin 'tmux-plugins/tmux-yank'
+run -b '~/.tmux/plugins/tpm/tpm'
