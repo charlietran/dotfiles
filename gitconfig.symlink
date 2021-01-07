@@ -70,6 +70,17 @@
 
   url =! bash -c 'git config --get remote.github.url | sed -E "s/.+:\\(.+\\)\\.git$/https:\\\\/\\\\/github\\\\.com\\\\/\\\\1/g"'
 
+	st = status --short -uno
+	ci = commit
+	ca = commit --amend
+	ca = commit -a --amend
+	br = branch
+	co = checkout
+	df = diff
+	lg = log -p --pretty=fuller --abbrev-commit
+	lgg = log --pretty=fuller --abbrev-commit --stat
+	up = pull --rebase
+
 [apply]
   # Detect whitespace errors when applying a patch
   whitespace = fix
@@ -86,12 +97,12 @@
   local = yellow
   remote = green
 [color "diff"]
-  meta = yellow
+  meta = 11
   frag = magenta bold
   commit = yellow bold
   old = red bold
   new = green bold
-  whitespace = red reverse
+  whitespace = normal reverse
 [color "status"]
   added = yellow
   changed = green
@@ -118,10 +129,10 @@
 
 [core]
   quotepath = false
-  excludesfile = ~/.gitignore
+	excludesfile = /Users/chatra/.gitignore
   whitespace = space-before-tab,indent-with-non-tab,trailing-space
-  editor = "nvim"
-  pager = diff-so-fancy | less --tabs=4 -RFX
+  editor = "/usr/local/bin/nvim"
+	pager = less --tabs=4 -RFX
 
 [mergetool]
   keepBackup = true
@@ -140,6 +151,7 @@
 
 [pager]
   difftool = true
+  diff = diff-so-fancy | less --tabs=4 -RFXS --pattern '^(Date|added|deleted|modified): '
 
 [diff "nodiff"]
 	command = /usr/bin/true
@@ -150,8 +162,6 @@
 [apply]
 	whitespace = nowarn
 
-# [branch]
-# 	autosetuprebase = always
 [filter "lfs"]
 	clean = git-lfs clean %f
 	smudge = git-lfs smudge %f
@@ -159,3 +169,13 @@
 [gitsh]
 	defaultCommand = status -sb
   gitCommand = /usr/local/bin/hub
+[credential]
+	helper = osxkeychain
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
+[commit]
+	template = /Users/chatra/.stCommitMsg
