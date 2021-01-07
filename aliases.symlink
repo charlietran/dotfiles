@@ -5,14 +5,18 @@ alias ....="cd ../../.."
 alias .....="cd ../../../.."
 alias -- -="cd -"
 
-#SSH Config
+#SSH
 alias sshconfig="v ~/.ssh/config"
+alias mp="mosh --ssh \"ssh -i ~/dev/parsec/charlie-parsec.pem\" ubuntu@54.89.31.154 -- tmux new-session -A -s main"
 
 # Editing
 alias e="nvim"
 alias v="nvim"
 alias vim="nvim"
-alias todo="nvim ~/todo.txt"
+alias todo="nvim ~/todo.md"
+
+alias m="make"
+
 
 # Shortcuts
 alias d="cd ~/Dropbox"
@@ -38,14 +42,14 @@ alias prodconsole='crystal run console'
 # Git shortcuts
 alias g="git"
 alias gs="git s"
+alias ga="clear; git add --intent-to-add . && git add --patch"
 alias gc="git c"
-alias gcp="git c; git push"
 alias gr="git r"
 alias gp="git p"
 alias gl="git l"
+alias gb="git branch -a"
 alias aa="clear; git aa"
 alias discard="clear; git checkout -p"
-alias gt="gittower"
 alias push="git push"
 alias publish="git push -u origin HEAD"
 alias wtf="git-wtf"
@@ -53,7 +57,7 @@ alias commit="git commit"
 alias checkout="g checkout"
 alias branch="g checkout -b"
 alias amend="git c --amend"
-alias gpr="hub pull-request"
+alias lg="lazygit"
 
 # Detect which `ls` flavor is in use
 if ls --color > /dev/null 2>&1; then # GNU `ls`
@@ -151,3 +155,6 @@ alias be="bundle exec"
 alias binst="bundle install"
 alias rc="cd ~/dev/crystal && bin/rails console"
 alias rk="bin/rake"
+
+# Pico8
+alias pico8="/Applications/PICO-8.app/Contents/MacOS/pico8"
