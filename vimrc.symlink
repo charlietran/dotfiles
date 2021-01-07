@@ -1,4 +1,4 @@
-" You want Vim, not vi. When Vim finds a vimrc, 'nocompatible' is set anyway.
+" You want Vim, not vi. When Vim finds a vimrc, 'nocompatible' is set anywa
 " we set it explicitly to make our position clear!
 set nocompatible
 
@@ -15,19 +15,16 @@ set autowrite " Automatically :write before running commands
 " curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 call plug#begin()
-Plug 'benmills/vimux'
 Plug 'christoomey/vim-tmux-navigator'   " navigate between vim splits / tmux panes
 Plug 'ctrlpvim/ctrlp.vim'               " Fuzzy finder
 Plug 'dracula/vim'                      " Dracula color theme
-Plug 'ervandew/supertab'                " Tab-completion in insert mode
 Plug 'janko-m/vim-test'                 " RSpec bindings
 Plug 'w0rp/ale'                         " Async Linting Engine
 Plug 'scrooloose/nerdcommenter'         " Commenting
 Plug 'tpope/vim-eunuch'                 " helpers for Unix shell cmds (move, rename, etc)
 Plug 'tpope/vim-unimpaired'             " Text manipulation helpers
-Plug 'tpope/vim-rails'                  " Rails helpers
 Plug 'tpope/vim-surround'               " Gives s modifier to surround/delete quotes/parents
-Plug 'vim-ruby/vim-ruby'                " Ruby helpers
+Plug 'tpope/vim-vinegar'                " Netrw enhancements
 Plug 'vim-scripts/cmdalias.vim'         " Simple command aliases
 Plug 'Konfekt/FastFold'                 " Folding performance improvement
 Plug 'tpope/vim-fugitive'               " Git commands
@@ -40,19 +37,23 @@ Plug 'ludovicchabant/vim-gutentags'
 Plug 'AndrewRadev/linediff.vim'
 Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
+Plug 'mileszs/ack.vim'                  "For AG searching
+Plug 'junegunn/vim-easy-align'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'vimwiki/vimwiki'
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 call plug#end()
 
 filetype plugin indent on " Load plugins according to detected filetype.
 syntax on " Enable syntax highlighting.
 
-" Exclude Javascript files in :Rtags via rails.vim due to warnings when parsing
-"let g:Tlist_Ctags_Cmd="ctags --exclude='*.js'"
-
 " files to ignore
 " ----------------------------------------------------------------------------
 set wildignore+=*/.git/*
 set wildignore+=*/node_modules/*
-set wildignore+=node_modules
 set wildignore+=*/tmp/*
 set wildignore+=*/log/*
 set wildignore+=*/vcr/*
@@ -88,9 +89,15 @@ set background=dark
 set cursorline
 
 " Netrw File Browser Settings
-"""""""""""""""""""""""""""""
 let g:netrw_banner = 0            " Disable netrw (Ex) banner
 let g:netrw_liststyle = 3         " Use tree-style listing
+let g:netrw_browse_split = 0
+let g:netrw_winsize = 25
+augroup ProjectDrawer
+  autocmd!
+  autocmd VimEnter * if argc() == 0 | Explore! | endif
+augroup END
+
 " Put plugins and dictionaries in this dir (also on Windows)
 let vimDir = '$HOME/.vim'
 let &runtimepath.=','.vimDir
@@ -105,25 +112,37 @@ if has('persistent_undo')
     set undofile
 endif
 
+" Aliases
+" -----------------------------------------------------------------------------
+" generic, typo-preventing aliases
+au VimEnter * if exists("loaded_cmdalias") |
+      \ call CmdAlias('WQ','wq') |
+      \ call CmdAlias('Wq','wq') |
+      \ call CmdAlias('W','w') |
+      \ call CmdAlias('Q','q') |
+      \ call CmdAlias('E','e') |
+      \ call CmdAlias('ex','Ex') |
+
+let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
+let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
+set termguicolors
+
 " Use The Silver Searcher https://github.com/ggreer/the_silver_searcher
 if executable('ag')
   " Use Ag over Grep
   set grepprg=ag\ --nogroup\ --nocolor
 
   " Use ag in CtrlP for listing files. Lightning fast and respesdts .gitignore
-  let g:ctrlp_user_command = 'ag --ignore ''_site/*'' --ignore ''.happypack/*'' --follow --skip-vcs-ignores --literal --files-with-matches --nocolor --hidden -g "" %s'
-
+  "let g:ctrlp_user_command = 'ag --follow --skip-vcs-ignores --literal --files-with-matches --nocolor --hidden -g "" %s'
+  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
   " ag is fast enough that CtrlP doesn't need to cache
   let g:ctrlp_use_caching = 0
   let g:ctrlp_cache_dir = '/tmp/ctrlp'
 
-  let g:NERDTreeChDirMode       = 2
   let g:ctrlp_working_path_mode = 'rw'
 
-  if !exists(":Ag")
-    command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
-    nnoremap \ :Ag<SPACE>
-  endif
+	let g:ackprg = 'ag --nogroup --nocolor --column'
+  nnoremap \ :Ack!<SPACE>
 endif
 
 let g:loaded_sql_completion = 0
@@ -132,6 +151,7 @@ let g:omni_sql_no_default_maps = 1
 " UI settings
 " -----------------------------------------------------------------------------
 color dracula              " Use dracula theme
+let g:dracula_italic = 1
 set ruler                  " show the cursor position all the time
 set noshowcmd              " don't display incomplete commands
 "set nolazyredraw           " turn off lazy redraw
@@ -178,6 +198,12 @@ set noerrorbells
 " Gutentags
 "let g:gutentags_trace = 1
 
+" Airline config
+let g:airline_theme='dracula'
+let g:airline_section_b=''
+let g:airline_section_y=''
+let g:airline#extensions#wordcount#enabled=0
+
 " Statusline
 set laststatus=2 " always show the status line
 set statusline=%f
@@ -185,13 +211,16 @@ set statusline+=\ %h%m%r
 set statusline+=%=%-14.(%l,%c%V%)
 set statusline+=\ %#warningmsg#
 set statusline+=\ %{gutentags#statusline()}
-"set statusline+=\ %{SyntasticStatuslineFlag()}
 hi StatusLine ctermfg=231 ctermbg=240 cterm=bold guifg=#f8f8f2 guibg=#64666d gui=bold
 hi StatusLineNC ctermfg=231 ctermbg=236 cterm=NONE guifg=#f8f8f2 guibg=#64666d gui=NONE
 "set statusline+=%*
 
 " ale configuration
 let g:ale_ruby_reek_show_wiki_link  = 1
+let g:ale_sign_error = '⤫'
+let g:ale_sign_warning = '⚠'
+nmap <silent> gj :ALENext<cr>
+nmap <silent> gk :ALEPrevious<cr>
 
 " use Prettier for JS and HTML
 let g:ale_fixers = {
@@ -214,6 +243,12 @@ let g:ale_fix_on_save = 1
 " Leader Bindings
 " -----------------------------------------------------------------------------
 
+" deoplete
+if has('nvim')
+    " Enable deoplete on startup
+    let g:deoplete#enable_at_startup = 1
+endif
+
 " spacebar for leader key
 let mapleader = "\<Space>"
 
@@ -229,12 +264,12 @@ nnoremap <c-space> <c-^>
 
 " Rspec command shortcuts
 "let g:rspec_command = "Start bin/rspec --format documentation {spec}"
-let test#strategy = "vimux"
+"let test#strategy = "vimux"
 "let test#ruby#rspec#executable="bin/rspec"
 let test#ruby#rspec#executable = "bin/rspec"
 "let test#ruby#rspec#options = "--format documentation"
-let VimuxUseNearest = 1
-let g:VimuxHeight = "40"
+"let VimuxUseNearest = 1
+"let g:VimuxHeight = "40"
 
 "nnoremap <f10> :VimuxZoomRunner<CR>
 "inoremap <f10> <Esc>:VimuxZoomRunner<CR>
@@ -242,24 +277,26 @@ let g:VimuxHeight = "40"
 nnoremap <f10> :call _VimuxTmux("resize-pane -Z -t ".g:VimuxRunnerIndex) <bar> :call _VimuxTmux("copy-mode")<CR>
 inoremap <f10> :call _VimuxTmux("resize-pane -Z -t ".g:VimuxRunnerIndex) <bar> :call _VimuxTmux("copy-mode")<CR>
 
-nnoremap <leader>t :TestFile<CR>
-nnoremap <leader>r :TestNearest<CR>
-nnoremap <leader>e :VimuxRunLastCommand<CR>
+"nnoremap <leader>t :TestFile<CR>
+"nnoremap <leader>r :TestNearest<CR>
+"nnoremap <leader>e :VimuxRunLastCommand<CR>
 
 "jump to alternate
 nnoremap <leader>a :A<CR>
 
+" Git stuff
 " Show current file in Github.com (fugitive)
-nnoremap <leader>g :Gbrowse<CR>
-vmap <leader>g :Gbrowse<CR>
-
-" Git blame
+nnoremap <leader>G :Gbrowse<CR>
+vmap <leader>G :Gbrowse<CR>
 nnoremap <leader>b :Gblame<CR>
 
 " CtrlP jump to file
 nnoremap <leader>o :CtrlP<CR>
+" CtrlP jump to tag in working directory
+nnoremap <leader>O :CtrlPTag<CR>
 " CtrlP jump to tag in current buffer
 nnoremap <leader>m :CtrlPBufTag<CR>
+
 " Explore fodler of the current file
 map <leader>f :e <C-R>=expand("%:p:h") . "/" <CR><CR>
 
@@ -268,6 +305,9 @@ nnoremap <leader>w :w<CR>
 
 " leader-q to quit
 nnoremap <leader>q :q<CR>
+
+" leader-n to open new tab buffer
+nnoremap <leader>n :tabe<CR>
 
 " nerd commenter
 map <leader>/ <plug>NERDCommenterToggle<CR>
@@ -288,6 +328,30 @@ map <leader>P "*P
 map <leader>\ :vsp<CR>
 map <leader>- :sp<CR>
 
+" look up documentation for word under cursor
+map <leader>k :execute "tab h " . expand("<cword>")<cr>
+
+let g:NetrwIsOpen=0
+
+function! ToggleNetrw()
+  if g:NetrwIsOpen
+    let i = bufnr("$")
+    while (i >= 1)
+      if (getbufvar(i, "&filetype") == "netrw")
+        silent exe "bwipeout " . i
+      endif
+      let i-=1
+    endwhile
+    let g:NetrwIsOpen=0
+  else
+    let g:NetrwIsOpen=1
+    silent Lexplore
+  endif
+endfunction
+"command! -bang -nargs=? ToggleLex call ToggleNetrw()
+map <leader>e :Lex<CR>
+
+
 "Quickfix Toggle
 command! -bang -nargs=? QFix call QFixToggle(<bang>0)
 function! QFixToggle(forced)
@@ -300,6 +364,9 @@ function! QFixToggle(forced)
   endif
 endfunction
 nnoremap <silent> <leader>l :QFix<CR>
+
+" Auto close a quickfix after selecting an item
+:autocmd FileType qf nnoremap <buffer> <CR> <CR>:cclose<CR>
 
 "Prettify JSON
 command! JSONpretty %!python -m json.tool
@@ -387,7 +454,7 @@ inoremap <C-e> <ESC>$a
 "vnoremap ; :
 
 " Open the current file with Mac default app
-nnoremap <silent> <F5> :!open %:p<CR><CR>
+nnoremap <silent> <F5> :!open %<CR><CR>
 
 if has("autocmd")
   " remove trailing white spaces
@@ -406,10 +473,17 @@ if has("autocmd")
 
 endif
 
+"let g:mkdp_auto_start = 0
+
+function! g:Open_browser(url)
+    silent exe 'silent !open -a "Google Chrome" ' . a:url
+endfunction
+let g:mkdp_browserfunc = 'g:Open_browser'
+
 " Formatting Rules for Markdown
 augroup Markdown
   autocmd!
-  autocmd BufNew,BufRead *.md setlocal textwidth=80 wrapmargin=0
+  autocmd BufNew,BufRead *.md setlocal textwidth=80 wrapmargin=0 autoindent colorcolumn=0 linebreak tabstop=4
 augroup END
 
 " Formatting Rules for Pico8
@@ -430,26 +504,118 @@ if has('nvim')
   :nnoremap <A-l> <C-w>l
 endif
 
-"Auto complete and re-indent HTML when typing </
-":inoremap <lt>/ </<C-x><C-o><Esc>==gi
+" Golang specific settings
+let g:go_def_mode='gopls'
+let g:go_info_mode='gopls'
+let g:go_highlight_build_constraints = 1
+let g:go_highlight_extra_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_structs = 1
+let g:go_highlight_types = 1
+let g:go_list_type = "quickfix"
+let g:go_doc_keywordprg_enabled = 0
+let g:go_rename_command = 'gopls'
+
+"let g:go_auto_sameids = 1
+"let g:go_auto_type_info = 1
+
+nmap <F2> :GoRename<CR>
+
+augroup FileType go
+	set noexpandtab
+	set shiftwidth=2
+	set softtabstop=2
+	set tabstop=2
+	nnoremap gr :GoRun<CR>
+	nnoremap gh :GoDoc<CR>
+augroup END
+
 autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
 
-" Aliases
-" -----------------------------------------------------------------------------
-" generic, typo-preventing aliases
-au VimEnter * if exists("loaded_cmdalias") |
-      \ call CmdAlias('WQ','wq') |
-      \ call CmdAlias('Wq','wq') |
-      \ call CmdAlias('W','w') |
-      \ call CmdAlias('Q','q') |
-      \ call CmdAlias('E','e') |
-      \ call CmdAlias('ex','Ex') |
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)*
+vmap a <Plug>(EasyAlign)*
 
-" vim-rails specific aliases
-au VimEnter * if exists("loaded_cmdalias") |
-      \ call CmdAlias('em','Emodel') |
-      \ call CmdAlias('ec','Econtroller') |
-      \ call CmdAlias('ev','Eview') |
-      \ call CmdAlias('av','AV') |
-      \ call CmdAlias('Av','AV') |
-      \ call CmdAlias('a','A') |
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)*
+
+""" COC completion configuration
+" Better display for messages
+set cmdheight=2
+
+" You will have bad experience for diagnostic messages when it's default 4000.
+set updatetime=300
+
+" don't give |ins-completion-menu| messages.
+set shortmess+=c
+
+" always show signcolumns
+set signcolumn=yes
+
+" Use tab for trigger completion with characters ahead and navigate.
+" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
+" Coc only does snippet and additional edit on confirm.
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+" Remap keys for gotos
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use K to show documentation in preview window
+nnoremap <silent> <leader>d :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+""" End COC completion configuration
+
+" VimWiki
+let g:vimwiki_list = [{'path': '$HOME/wiki', 'syntax': 'markdown', 'ext': '.md'}] " set path to a directory inside Dropbox
+let g:vimwiki_ext = '.md' " set extension to .md
+let g:vimwiki_global_ext = 0 " make sure vimwiki doesn't own all .md files
+
+let g:vimwiki_key_mappings =
+\ {
+\   'all_maps': 1,
+\   'global': 0,
+\   'headers': 1,
+\   'text_objs': 1,
+\   'table_format': 1,
+\   'table_mappings': 1,
+\   'lists': 1,
+\   'links': 1,
+\   'html': 0,
+\   'mouse': 0,
+\ }
+
+nmap <Tab>ww <Plug>VimwikiIndex
+nmap <Tab>wt <Plug>VimwikiTabIndex
+nmap <Tab>ws <Plug>VimwikiUISelect
+nmap <Tab>wi <Plug>VimwikiUISelect
+nmap <Tab>w<Tab>v <Plug>VimwikiMakeDiaryNote
+nmap <Tab>w<Tab>t <Plug>VimwikiTabMakeDiaryNote
+nmap <Tab>w<Tab>y <Plug>VimwikiMakeYesterdayDiaryNote
+nmap <Tab>w<Tab>m <Plug>VimwikiMakeTomorrowDiaryNote
+
